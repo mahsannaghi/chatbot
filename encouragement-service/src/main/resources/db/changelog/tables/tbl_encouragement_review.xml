@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    
+    <changeSet id="7" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_encouragement_review">
+            <column name="encouragement_review_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="encouragement_review_encouragement_id" type="UUID"/>
+            <column name="encouragement_review_registrar_organization_id" type="VARCHAR(255)"/>
+            <column name="encouragement_review_paying_authority_id" type="UUID"/>
+            <column name="encouragement_review_encouragement_type_id" type="UUID"/>
+            <column name="encouragement_review_result" type="INT"/>
+            <column name="encouragement_review_description" type="VARCHAR(255)"/>
+            <column name="encouragement_review_created_at" type="TIMESTAMP"/>
+            <column name="encouragement_review_amount" type="DOUBLE PRECISION"/>
+            <column name="encouragement_review_amount_type" type="INT"/>
+            <column name="encouragement_review_percentage" type="INT"/>
+            <column name="encouragement_review_type" type="INT"/>
+            <column name="encouragement_review_updated_at" type="TIMESTAMP"/>
+            <column name="encouragement_review_sent_draft_date" type="DATE"/>
+            <column name="encouragement_review__applied_date" type="DATE"/>
+            <column name="encouragement_review_draft" type="INT"/>
+            <column name="encouragement_review_encouragement_reason_type_id" type="UUID"/>
+            <column name="encouragement_review_reason_type_id" type="UUID"/>
+            <column name="encouragement_review_encouragement_amount" type="BIGINT"/>
+            <column name="encouragement_review_encouragement_description" type="VARCHAR(255)"/>
+            <column name="encouragement_review_encouragement_applied_date" type="DATE"/>
+            <column name="encouragement_review_encouragement_created_date" type="DATE"/>
+            <column name="encouragement_review_encouragement_amount_type" type="INT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

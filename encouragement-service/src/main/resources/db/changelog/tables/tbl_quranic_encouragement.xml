@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Changeset to create the table -->
+    <changeSet id="10" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_quranic_encouragement"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_quranic_encouragement">
+            <column name="quranic_encouragement_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="quranic_encouragement_quranic_seniority_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quranic_encouragement_registrar_personnel_id" type="UUID"/>
+
+            <column name="quranic_encouragement_related_personnel_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quranic_encouragement_amount" type="INT"/>
+
+            <column name="quranic_encouragement_created_at" type="DATE"/>
+
+            <column name="quranic_encouragement_updated_at" type="DATE"/>
+        </createTable>
+    </changeSet>
+
+
+
+</databaseChangeLog>

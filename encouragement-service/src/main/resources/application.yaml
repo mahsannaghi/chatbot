@@ -1,0 +1,102 @@
+server:
+  servlet:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+  error:
+    whitelabel:
+      enabled: false
+  port: ${BACKEND_SERVER_PORT}
+  jetty:
+    max-http-form-post-size: 10MB
+  tomcat:
+    max-http-form-post-size: 30MB
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER}/eureka/
+    fetch-registry: true
+    register-with-eureka: false
+    enabled: false
+
+encouragement:
+  responseQueueSuffix: _RESPONSE_KEY
+  typeOfPersonnelDTOSending: personnel
+  typeOfManagerDTOSending: personnelWithManager
+  consumerName: dd
+  defaultPageNumber: 0
+  timeout: 10000
+  typeOfBasePersonnelDTOSending: basePersonnel
+  requestQueueSuffix: _REQUEST_KEY
+  defaultPageSize: 9000
+
+spring:
+  application:
+    name: encouragement-service
+  servlet:
+    multipart:
+      enabled: 'true'
+      max-request-size: 10MB
+      max-file-size: 10MB
+  main:
+    allow-circular-references: false
+  messages:
+    cache-duration: 3600
+    encoding: UTF-8
+    basename: messages
+  rabbitmq:
+    password: admin
+    host: 10.16.113.23
+    port: 5672
+    username: admin
+    virtual-host: /
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
+    clearCheckSums: false
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
+    show-sql: true
+    use_sql_comments: true
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://${DB_HOST}:${DB_PORT};encrypt=true;trustServerCertificate=true;databaseName=${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  web:
+    cors:
+      allowed-methods: GET,POST,PUT,DELETE,PATCH
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid, email, roles, ip, userId, web-origins, P_MU_C, profile, objectKeys
+            authorization-grant-type: authorization_code
+            redirect-uri: ${KEYCLOAK_REDIRECT_URI}/login/oauth2/code/keycloak
+        provider:
+          keycloak:
+            authorization-uri: ${KEYCLOAK_SERVER}/auth/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/auth
+            token-uri: ${KEYCLOAK_SERVER}/auth/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/token
+            user-info-uri: ${KEYCLOAK_SERVER}/auth/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/userinfo
+
+
+keycloak:
+  logout-url: ${KEYCLOAK_SERVER}/auth/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/logout
+  back-logout: ${BACKEND_HOST}/logout
+  login: ${BACKEND_HOST}
+  public-key-url: ${KEYCLOAK_SERVER}/auth/realms/${KEYCLOAK_REALM_NAME}/protocol/openid-connect/certs
+
+objectKey:
+  serviceRoleKey: "encouragement_user_role"

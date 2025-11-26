@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="8" author="amiri">
+        <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="tbl_grade_encouragement"/>
+        </not>
+        </preConditions>
+        <createTable tableName="tbl_grade_encouragement">
+            <column name="grade_encouragement_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="grade_encouragement_new_grade" type="INT"/>
+
+            <column name="grade_encouragement_registrar_personnel_id" type="UUID"/>
+
+            <column name="grade_encouragement_related_personnel_id" type="UUID"/>
+
+            <column name="grade_encouragement_created_at" type="DATETIME"/>
+
+            <column name="grade_encouragement_updated_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

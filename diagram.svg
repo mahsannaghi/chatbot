@@ -1,0 +1,10 @@
+Error 400: Error: An error occurred while converting the diagram: ENOSPC: no space left on device, mkdtemp '/tmp/puppeteer_dev_chrome_profile-XXXXXX'
+Error: ENOSPC: no space left on device, mkdtemp '/tmp/puppeteer_dev_chrome_profile-XXXXXX'
+    at async mkdtemp (node:internal/fs/promises:1177:10)
+    at async ChromeLauncher.computeLaunchArguments (file:///usr/local/kroki/node_modules/puppeteer-core/lib/esm/puppeteer/node/ChromeLauncher.js:75:53)
+    at async ChromeLauncher.launch (file:///usr/local/kroki/node_modules/puppeteer-core/lib/esm/puppeteer/node/BrowserLauncher.js:45:28)
+    at async createBrowser (file:///usr/local/kroki/src/browser-instance.js:8:19)
+    at async getBrowserWSEndpoint (file:///usr/local/kroki/src/browser-instance.js:74:16)
+    at async Worker._connect (file:///usr/local/kroki/src/worker.js:113:31)
+    at async Worker.convert (file:///usr/local/kroki/src/worker.js:33:21)
+    at async file:///usr/local/kroki/src/index.js:31:28

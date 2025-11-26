@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_attachment">
+            <column name="attachment_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="attachment_file" type="varbinary">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attachment_quranic_encouragement_id" type="UNIQUEIDENTIFIER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attachment_grade_encouragement_id" type="UNIQUEIDENTIFIER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attachment_name" type="nvarchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="create_date" type="datetime">
+
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

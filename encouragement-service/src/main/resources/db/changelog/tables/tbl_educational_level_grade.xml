@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_educational_level_grade">
+            <column name="educational_level_grade_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="educational_level_grade_degree" type="tinyint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="educational_level_grade_rank_code" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="educational_level_grade_is_active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="educational_level_grade_creation_date" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

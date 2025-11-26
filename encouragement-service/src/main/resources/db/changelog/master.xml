@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Include separate changelog files for each table -->
+    <include file="db/changelog/tables/tbl_attachment.xml"/>
+    <include file="db/changelog/tables/tbl_educational_level_grade.xml"/>
+    <include file="db/changelog/tables/tbl_encouragement.xml"/>
+    <include file="db/changelog/tables/tbl_encouragement_reason.xml"/>
+    <include file="db/changelog/tables/tbl_encouragement_reason_type.xml"/>
+    <include file="db/changelog/tables/tbl_encouragement_review.xml"/>
+    <include file="db/changelog/tables/tbl_encouragement_type.xml"/>
+    <include file="db/changelog/tables/tbl_grade_encouragement.xml"/>
+    <include file="db/changelog/tables/tbl_queue.xml"/>
+    <include file="db/changelog/tables/tbl_quranic_encouragement.xml"/>
+    <include file="db/changelog/tables/tbl_quranic_seniority.xml"/>
+    <include file="db/changelog/tables/tbl_registrar_power_limits.xml"/>
+    <include file="db/changelog/tables/tbl_upgrade_degree_seniority.xml"/>
+
+
+</databaseChangeLog>

@@ -1,0 +1,58 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="tbl_encouragement_type-create-3" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_encouragement_type">
+            <column name="encouragement_type_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="encouragement_type_title" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="encouragement_type_is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="encouragement_type_nature_type" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <!-- وارد کردن داده‌ها به جدول tbl_encouragement_type -->
+    <!-- برای اینزرت جدید باید id جدید شود -->
+    <changeSet id="tbl_encouragement_type-insert-4" author="reihan">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tbl_encouragement_type"/>
+        </preConditions>
+        <insert tableName="tbl_encouragement_type">
+            <column name="encouragement_type_id" valueComputed="NEWID()"/>
+            <column name="encouragement_type_title" value="ارشدیت"/>
+            <column name="encouragement_type_is_active" value="1"/>
+            <column name="encouragement_type_nature_type" value="0"/>
+            <column name="encouragement_type_category" value="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+        <insert tableName="tbl_encouragement_type">
+            <column name="encouragement_type_id" valueComputed="NEWID()"/>
+            <column name="encouragement_type_title" value="دستور سازمان"/>
+            <column name="encouragement_type_is_active" value="1"/>
+            <column name="encouragement_type_nature_type" value="0"/>
+            <column name="encouragement_type_category" value="1"/>
+            <column name="created_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,740 @@
+[ {
+  "methodName" : "getResults",
+  "summary" : "In summary, this code fetches reasons and types from the database based on provided filters, groups the results by reason ID, and returns a list of `ResultDTO` objects containing reason and type information. The business logic involves filtering types based on user-provided criteria (reason title and duration type) and checking if any of the types are active.",
+  "calls" : [ "filter", "create" ]
+}, {
+  "methodName" : "checkForDuplicateType",
+  "summary" : "In summary:\n\n* Check if `reasonId` and `typeId` are null\n\t+ If either is null, throw an exception\n* Check if `reasonTypeId` is null (or not)\n\t+ If `reasonTypeId` is null, check for duplicates based on `reasonId` and `typeId`\n\t+ If there's a duplicate, throw an exception\n* If no duplicates found, do nothing",
+  "calls" : [ ]
+}, {
+  "methodName" : "toEntity",
+  "summary" : "In summary, this method manages the creation and retrieval of encouragement reasons in a system. Its primary function is to take an EncouragementReasonTypeDTO as input and return an updated EncouragementReasonType entity.\n\nThe method first checks for duplicate reason types, ensuring that identical reasons are not created multiple times. If the input DTO contains no ID (reasonTypeID), it creates a new encouragement reason with a unique identifier. Conversely, if an ID is provided, it retrieves the existing reason from the database and throws an exception if no matching record is found.\n\nRegardless of whether a new or existing entity is being processed, the method updates the fields of the entity based on the input DTO's values. The final step is to return the updated encouragement reason type entity.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "processEncouragementRequest",
+  "summary" : "In summary, the processEncouragementRequest method enables the management of encouragement reason types. It handles requests to add, update, or delete these reason types while ensuring data consistency across related records in the Encouragement table.\n\nKey business processes include:\n\n1. **Validation**: Before processing a request, the system checks for duplicate reason type combinations and prevents any attempts to create duplicate entries.\n2. **Update existing reasons**: If an existing reason type is found matching the provided ID and type, the system updates its values with those from the request.\n3. **Create new reasons**: When no existing reason type matches the request, a new entity is created based on the request's values and saved in the database.\n4. **Delete reasons**: The system processes requests to delete reason types only if there are no related records in the Encouragement table; otherwise, it throws an exception indicating a conflict.\n\nOverall, processEncouragementRequest ensures that encouragement reason types are properly managed, maintained, and updated while preserving data integrity across relevant tables.",
+  "calls" : [ "toEntity", "add", "update", "create", "delete" ]
+}, {
+  "methodName" : "validateThatCanBeUpdated",
+  "summary" : "In summary, this method validates whether an encouragement reason type can be updated. It checks if the entity's values are different from the type's values and if there are any associated encouragements. If so, it throws a `ValidationException`. If not, it checks if the entity is inactive and its values differ from the type's values, in which case it throws a `GeneralException`.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateEntityFields",
+  "summary" : "In summary, the business logic is about updating a record's fields based on values from a data transfer object. The code checks for nulls and then performs these updates.",
+  "calls" : [ ]
+}, {
+  "methodName" : "convertToDTO",
+  "summary" : "In summary, the business logic in this code is simply to convert an `EncouragementReasonType` entity into a corresponding `EncouragementReasonTypeDTO`.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "searchByReasonAndTypeTitles",
+  "summary" : "In summary, the business logic is to search for EncouragementReasonType objects based on reasonTitle and typeTitle, map the results to a list of EncouragementReasonTypeDTOs, and return that list.",
+  "calls" : [ "filter", "convertToDTO" ]
+}, {
+  "methodName" : "getGroupedReasonTypes",
+  "summary" : "In summary, this method takes two parameters: `reasonTitle` and `typeTitle`. It returns a list of `ReasonTypeDTOV2` objects that meet certain conditions.\n\nThe method first retrieves all grouped reason types from the database. Then, it sets the encouragement reason titles for each reason type and retrieves their associated encouragement types. If a `typeTitle` is provided, it filters the encouragement types to include only those whose titles match the provided `typeTitle`.\n\nFinally, if a `reasonTitle` is provided, it filters the resulting list of reason types to include only those with an encouragement reason title that matches the provided `reasonTitle`.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, this method is designed to find an encouragement reason type by its ID. If a valid ID is provided, it will try to retrieve the corresponding record from the database and return it if found. If no matching record is found, it will throw an exception with a descriptive message.\n\nIf an invalid or null ID is provided, it will also throw an exception with a different error message.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getEncouragementTypeByReasonTypeId",
+  "summary" : "In summary:\n\nThe \"getEncouragementTypeByReasonTypeId\" method retrieves the type of encouragement associated with a specific reason type identifier (UUID). It does so by querying a data repository called \"reasonTypeRepository\", likely accessing external data stored in a database. The method takes an input UUID and returns the corresponding encouragement type as an integer value, providing a straightforward mapping between reason types and their respective encouragements.",
+  "calls" : [ ]
+}, {
+  "methodName" : "checkIfReasonTypeUsedInEncouragement",
+  "summary" : "In summary, this method checks for a specific reason type being used in an encouragement, and if it finds one that has not been used before, it allows the process to proceed successfully.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getRankLevelData",
+  "summary" : "In summary, the business logic of this code is:\n\n1. Retrieve a list of `RankLevelDataDTO` from an external service (using Feign Client).\n2. Filter the retrieved list based on some condition (currently commented out) to refine the data.\n3. Return the filtered list as the result.\n\nThe decision-making involves filtering the initial list, but the specific condition is not specified in this code snippet.",
+  "calls" : [ "filter", "getAllRankWithCivilian" ]
+}, {
+  "methodName" : "getAllRankWithCivilian",
+  "summary" : "In summary:\n\n* The method makes an external call to fetch civilian rank level data.\n* It receives the response and extracts the relevant information (the `List<RankLevelDataDTO>`).\n* That information is then returned from the original method.\n\nNo complex decision-making or business logic involved here; it's a straightforward request-response process.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllJobLevelWithJobGroup",
+  "summary" : "In summary, the business logic is:\n\n* Retrieve all job levels with job groups by calling an external service.\n* Get the actual data from the response and return it as a list.\n\nNo complex conditions or decision-making are involved in this code. It's simply a straightforward retrieval of data from an external source and returning it to the caller.",
+  "calls" : [ ]
+}, {
+  "methodName" : "determineRoles",
+  "summary" : "In summary, the business logic involves:\n\n1. Verifying the presence and format of an authorization header.\n2. Decoding a JWT access token from the header.\n3. Retrieving a claim called \"objectKeys\" from the decoded JWT.\n4. Parsing the objectKeys claim into a list of maps.\n5. Iterating over the key-value pairs in the first map of the list.\n6. Extracting role names from keys with value 1 and adding them to a set.\n7. Returning the set of roles.",
+  "calls" : [ ]
+}, {
+  "methodName" : "createUpgradeDegreeSeniority",
+  "summary" : "In summary, the business logic checks:\n\n* If the \"from degree\" and \"to degree\" fields are empty, throw an exception.\n* If there's already a record with the same \"from degree\" and \"to degree\", throw an exception.\n* Otherwise, create and save a new `UpgradeDegreeSeniority` entity.\n\nThe main goal is to ensure that the input data is valid and doesn't duplicate existing records in the database.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "updateUpgradeDegreeSeniority",
+  "summary" : "In summary:\n\n1. Validate that an ID is provided (or throw an exception).\n2. Check if a seniority object exists in the repository with matching from/to degrees. If found:\n\t* Validate the existing seniority's details match the input DTO's details. If true, throw an exception.\n\t* If false, create a new seniority object and update it after validation.\n3. If no seniority object is found, create a new one.\n\nThe business logic is essentially checking for duplicates in updating seniorities based on degrees, maximum amount, and active status.",
+  "calls" : [ "create", "update" ]
+}, {
+  "methodName" : "createUpgradeDegreeSeniorityAfterValidation",
+  "summary" : "In summary, the business logic involves updating an `UpgradeDegreeSeniority` entity with values from a data transfer object (`dto`) if they are not null. The resulting entity is then saved to the database and returned.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "getUpgradeDegreeSeniorities",
+  "summary" : "In summary, this method takes various parameters and uses them to filter a database query. It returns a paginated list of UpgradeDegreeSeniority records that meet specific conditions regarding degree, status, maximum amount, and amount range.",
+  "calls" : [ "filter", "create" ]
+}, {
+  "methodName" : "deleteUpgradeDegreeSeniority",
+  "summary" : "In summary, the deleteUpgradeDegreeSeniority method deletes an upgrade degree seniority record with a specified identifier (ID). This method checks for specific conditions related to the ID before taking action. If these conditions are met, it removes the corresponding upgrade degree seniority record from the database, effectively deleting the record.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "getUpgradeDegreeSeniorityById",
+  "summary" : "In summary, this method retrieves and returns an Upgrade Degree Seniority record based on its unique identifier (UUID). The method takes a UUID as input and uses it to locate the corresponding record in a repository. This allows for efficient lookup and retrieval of seniority information by UUID.",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "getMaxAmountWithLastDegreeAndNewDegree",
+  "summary" : "In summary:\n\nThis code verifies the validity of input degrees and ensures that neither degree is equal to 1. Once validated, it utilizes the input degrees to calculate a specific amount or value using an external calculation method (`repository.getMaxAmountWithLastDegreeAndNewDegree`), without revealing the exact calculation logic.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getPersonnelListEncouragement",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this method:\n\n1. Checks the current user's role and retrieves personnel data accordingly.\n2. Filters the retrieved personnel data based on a condition (`isMatching`) and updates the result response with the filtered results.\n3. Returns a pagination response DTO containing the filtered personnel list and page information.\n\nThe `isMatching` condition is not shown in this code snippet, but it's likely used to filter the personnel data based on some criteria specified in the `PersonnelListEncouragementFilterDTO`.",
+  "calls" : [ "filter", "isMatching" ]
+}, {
+  "methodName" : "isMatching",
+  "summary" : "In summary, the `isMatching` method checks if a person matches certain criteria by:\n\n1. Checking if the person's first name and last name contain specific words or phrases.\n2. Ensuring that the personnel organization ID of the person matches the encouraged personnel organization ID in the filter.\n\nIf all conditions are met, the method returns true; otherwise, it returns false.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "getPunishmentListOfThisServiceUnit",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this code takes in two possible filtering criteria (registrar's last name and individual punished's last name) and applies them to a list of punishment DTOs, returning the filtered results along with pagination information.",
+  "calls" : [ "filter", "setPunishment", "update" ]
+}, {
+  "methodName" : "setSameUnitPersonnelOrganizationId",
+  "summary" : "In summary, this code:\n\n1. Checks if the current user has an \"EXECUTIVE_MANAGER\" role and is logged in.\n2. If true, checks if there's a personnel profile associated with that user.\n3. If there is, it looks up or retrieves the list of personnel organization IDs based on their unit code.\n4. If not, throws a validation exception asking them to log in again.\n5. If none of the above conditions are met, also throws a validation exception stating that the service is not allowed for that user.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getEncouragementList",
+  "isEntryPoint" : true,
+  "summary" : "In summary, the code checks various filter criteria to retrieve personnel matching those criteria. It then extracts organization IDs from these personnel and updates the `filterDTO` accordingly. If certain conditions are met, it also retrieves punishment information or updates the encouragement records. The final output is a page DTO containing the retrieved encouragements and any relevant punishment information.",
+  "calls" : [ "filter", "setPageDTOFromEncouragementPage", "create", "update" ]
+}, {
+  "methodName" : "setPageDTOFromEncouragementPage",
+  "summary" : "In summary, this method transforms business logic into a structured output. It filters a list of encouragements based on specific reasons or types, and then constructs an `EncouragementAndPunishmentDTO` object that reflects the filtered encouragement list and potentially includes a punishment list.\n\nMore specifically, the method:\n\n* Applies reason-based filtering to the encouragement list if specified.\n* Applies type-based filtering to the encouragement list if specified.\n* Assembles an `EncouragementAndPunishmentDTO` with the filtered encouragement list as its core component.\n* Optionally adds a punishment list based on the filter settings.\n\nThe method's primary objective is to transform the raw data from the `encouragementPage.getContent()` into a meaningful business output that reflects the specified filtering criteria.",
+  "calls" : [ "filter", "getEncouragementReason" ]
+}, {
+  "methodName" : "setEncouragementDtoList",
+  "summary" : "In summary, this code processes each `Encouragement` object and converts it into a corresponding DTO (encouragementDTO). It sets various attributes on the DTO based on values from the original Encouragement object. If `withFile` is true, it retrieves attachments for each encouragement and adds them to the DTO. Finally, it adds the processed DTOs to the `encouragementList`.",
+  "calls" : [ "mapEntityToDTO", "create" ]
+}, {
+  "methodName" : "setPunishment",
+  "summary" : "In summary, this method:\n\n1. Calls another method to retrieve a list of punishments based on some filter criteria.\n2. If an exception occurs while doing so, it returns an empty list instead.\n\nNo complex conditions or decision-making are involved in this code.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "addOrUpdateEncouragement",
+  "isEntryPoint" : true,
+  "summary" : "In summary, the business logic and decision-making in this Java code involve:\n\n1. Validating input requests\n2. Creating or updating encouragements based on reason types and personnel organization IDs\n3. Checking if encouraged persons are not permanent members and have a personnel manager affiliated with the registrar's organization\n4. Updating encouragement statuses and performing calculations as needed",
+  "calls" : [ "calculator", "create", "update" ]
+}, {
+  "methodName" : "addOrUpdateEncouragementByEncouragementSpecialist",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this Java method implements a business logic that updates or creates encouragements for personnel organizations. The process involves:\n\n* Storing the reason type associated with an encouragement\n* Retrieving the current user's role from an authentication service\n* Updating or creating a file attachment and adding files to the encouragement (if possible)\n* Performing a calculation based on the encouragement draft being \"Sent\", using parameters such as the encouragement, reason type ID, registrar, and other inputs.\n\nThe method appears to be part of a workflow or approval process for personnel organizations, allowing users to create or update encouragements with associated file attachments and perform calculations when certain conditions are met.",
+  "calls" : [ "add", "calculator", "create" ]
+}, {
+  "methodName" : "createOrUpdateEncouragement",
+  "summary" : "In summary, this code creates or updates an encouragement object based on the provided request. It checks for various conditions to ensure that the object is valid and can be edited or updated. If any of these conditions are not met, it throws exceptions with error messages.",
+  "calls" : [ ]
+}, {
+  "methodName" : "validate",
+  "summary" : "In summary**, this method validates an \"encouragement\" (reward or incentive) to ensure it complies with predetermined rules and boundaries. Specifically, it checks whether the encouragement's amount or duration exceeds the maximum allowed limits specified by the reason type.\n\nThe validation process involves two key checks: \n\n1. If a maximum allowed amount is defined for the reason, the method ensures that the provided encouragement amount does not exceed this limit. If it does, an exception is raised indicating that the amount is higher than permitted.\n2. Similarly, if a maximum allowed duration (time period) is specified for the reason, the method checks whether the provided encouragement duration exceeds this limit. If it does, an exception is thrown with a message stating that the duration is longer than allowed.\n\nIn essence, this method serves as a gatekeeper to ensure that the encouragement's amount and duration align with predefined constraints, preventing invalid or excessive encouragements from being processed.",
+  "calls" : [ ]
+}, {
+  "methodName" : "calculator",
+  "summary" : "In summary:\n\n* The code processes encouragement requests based on employee rank and power limits.\n* It updates the encouragement status according to specific conditions.\n* It calls additional methods (`afterCheckingRegistrarPowerLimit`) depending on the outcome.\n* If any condition fails, it throws exceptions.",
+  "calls" : [ "afterCheckingRegistrarPowerLimit" ]
+}, {
+  "methodName" : "afterCheckingRegistrarPowerLimit",
+  "summary" : "In summary, this method has two main paths:\n\n1. If `isUpdateMode` is false, create a review from an encouragement.\n2. If the encouraged person has a manager and the draft is sent, forward the encouragement for the next step.\n\nIf neither condition is met, throw a general exception indicating that the list of personal managers is empty.",
+  "calls" : [ "forwardEncouragementForNextStep", "create", "createReviewFromEncouragement", "delete" ]
+}, {
+  "methodName" : "forwardEncouragementForNextStep",
+  "summary" : "In summary, this method checks if the current user has a specific role (Encouragement Specialist) or if there's no matching position for the encouragement creator. If true, it calls `commissionInput`. Otherwise, it determines which manager (next or previous) to forward the encouragement to based on some conditions and calls either `forwardNextManager` or `forwardPreviousManager`.",
+  "calls" : [ "forwardNextManager", "forwardPreviousManager", "commissionInput" ]
+}, {
+  "methodName" : "commissionInput",
+  "summary" : "In summary, this code handles two scenarios: creating a new review when there are no existing reviews and updating an existing review if one exists. It also updates the encouragement status if it's not already in the \"NEED FOR ACCEPT\" state.",
+  "calls" : [ "updateExistEncouragement", "changeEncouragementStatus" ]
+}, {
+  "methodName" : "forwardPreviousManager",
+  "summary" : "In summary, this code:\n\n* Checks if there is a previous manager and sets up variables accordingly.\n* Deletes reviews that are no longer needed.\n* Updates or creates new reviews based on encouragement status and whether it has been seen.\n* Sends the encouragement for the registrar when necessary.\n* Handles cases where the encouragement review needs to be deleted or updated.\n\nThe business logic revolves around managing encouragement reviews, updating their statuses, and sending them to the next manager in the chain.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "deleteRegistrarReviewIfExist",
+  "summary" : "In summary, this code checks if there's an \"Under Review\" ordinary review for a specific encouragement and then decides whether to delete that review (if found) or do nothing (if not found).",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "sentForRegistrar",
+  "summary" : "In summary:\n\n1. Check if registrar organizations match; if not, delete any previous reviews.\n2. Update encouragement status to \"SENT FOR CORRECTION\".\n3. Check if a review exists for the current registrar and this encouragement; if not, create one.\n4. If a review exists, update it by linking it to the current encouragement.\n\nThese actions are taken based on the logic of managing encouragements and reviews in an organization, where different registrars may be involved at different stages of the process.",
+  "calls" : [ "create", "update", "delete" ]
+}, {
+  "methodName" : "forwardNextManager",
+  "summary" : "In summary, the code checks the encouragement status and the position of the current manager in the list. Based on these conditions, it either deletes or updates existing reviews, creates new reviews, or performs other actions to forward the next manager's encouragement review process.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "createReviewFromEncouragement",
+  "summary" : "In summary:\n\nThe createReviewFromEncouragement method creates a new Encouragement Review based on an existing Encouragement, setting various properties of the review including its type, amount, and description. The review's creation date and time are also set. If a draft is provided, the review's draft status is updated accordingly. Additionally, if the registrar organization ID matches the one associated with the encouragement, the review's description is set to the encouragement's description. The method ultimately adds the Encouragement Review to the database.\n\nNote: This summary focuses on the business logic and process perspective of the method, without delving into implementation details.",
+  "calls" : [ "add", "fillEncouragementFieldsInEncouragementReview" ]
+}, {
+  "methodName" : "fillEncouragementFieldsInEncouragementReview",
+  "summary" : "In summary, the method \"fillEncouragementFieldsInEncouragementReview\" is responsible for populating the fields of an Encouragement Review object with relevant data from an existing Encouragement object. Specifically:\n\n* The method updates the amount, applied date, and amount type of the Encouragement Review to match those of the corresponding Encouragement.\n* It also copies over the description and reason type ID from the Encouragement to the Encouragement Review.\n\nThis process enables a seamless transfer of essential information from one object to another, facilitating accurate and efficient data management.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findReasonType",
+  "summary" : "In summary, the business logic of this code is:\n\n* Search for an entry in a database that matches both a `reasonId` and a `typeid`.\n* If no match is found, throw a `GeneralException` indicating that no connection was found between the type and reason.\n\nThis method seems to be responsible for validating whether a given `reasonId` and `typeid` combination exists in the system's data storage.",
+  "calls" : [ ]
+}, {
+  "methodName" : "deleteEncouragement",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this method is responsible for removing an encouragement record from the database based on a unique identifier. Specifically, it accepts an ID as input and uses that information to initiate the deletion of the associated encouragement entity in the database.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "changeEncouragementStatus",
+  "summary" : "In summary, this method updates an encouragement entity's status and related fields based on its new value. If the status indicates approval, rejection, or correction, it sets dates and organizations accordingly. If the status indicates sent for correction, it sets a flag to FALSE.",
+  "calls" : [ ]
+}, {
+  "methodName" : "mapEntityToDTO",
+  "summary" : "In summary, this code maps an `Encouragement` entity to a `EncouragementFilterDTOV2`, copying most of its fields and performing some conditional checks for specific date fields.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateEncouragementReview",
+  "isEntryPoint" : true,
+  "summary" : "In summary, the `updateEncouragementReview` method is responsible for updating an encouragement review based on its current state. The method ensures that certain conditions are met before making changes to the review.\n\nThe main logic of this method can be broken down into the following business-level rules:\n\n1. If a review has been sent and seen, it cannot be edited.\n2. When a review is in draft status (sent), create a concatenated description for the encouragement.\n3. The user cannot change the amount, type, or reason type unless the review result is \"correction and approval\".\n4. If the review result is \"correction and approval\", the user can update the review's amount, type, and reason type if they have changed (unless it has been sent and seen).\n5. For reviews in draft status that are not \"sent\", the user can still update the review's amount, type, and reason type if they have changed.\n6. Update each related encouragement review that needs it with the new values.\n\nOverall, this method is responsible for ensuring that updates to an encouragement review are made in accordance with its current state and any applicable rules or conditions.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "addFile",
+  "summary" : "In summary, this code handles the process of adding new files or removing existing ones as attachments for an encouragement.",
+  "calls" : [ "add" ]
+}, {
+  "methodName" : "createEncouragementConcatenatedDescription",
+  "summary" : "In summary:\n\nThe createEncouragementConcatenatedDescription method generates a descriptive text for an encouragement review based on specific business scenarios. The method considers two primary factors: the type of commission and the reason for the change in encouragement amount or reason.\n\nIf the commission type is either Ordinary Commission or VEDJA Commission, the method sets the personnel organization ID accordingly. \n\nWhen reviewing an updated encouragement review, the method generates a description based on whether the encouragement amount has changed (compared to the original) and whether the reason type IDs match. If the amounts are different but the reason types match, it creates a description highlighting the change in encouragement amount and reason. If the reason type IDs don't match, it generates a description focusing on the change in encouragement reason.\n\nIn cases where none of these conditions apply, the method produces a simple description based on the initial review description.\n\nThroughout the process, the method concatenates generated descriptions to create an overall concatenated description, which is then used to update the encouragement's concatenated description.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateEachEncouragementReviewThatNeeded",
+  "summary" : "In summary, the code performs various calculations and updates based on the values in the `dto` object, specifically:\n\n* Updating properties on the `entity` object\n* Calling the `calculator` method to perform calculations based on the encouragement review result\n* Sending the encouragement for commission or rejection\n* Changing the encouragement status\n* Deleting registrar reviews if necessary\n\nThe code also performs some checks and throws exceptions when certain conditions are met.",
+  "calls" : [ "calculator", "sendForVedjaCommission", "updateExistEncouragementReview", "changeEncouragementStatus" ]
+}, {
+  "methodName" : "encouragementInitialPreparation",
+  "summary" : "In summary, the code handles two types of encouragements: those that were previously rejected or sent for correction, and those that have not been seen. It updates their statuses accordingly, with the aim of preparing them for further processing.",
+  "calls" : [ ]
+}, {
+  "methodName" : "sendForVedjaCommission",
+  "summary" : "In summary, if there are no reviews for an encouragement, a new review is created and the encouragement's status is updated. If there are existing reviews, they're updated to reflect the progress of the commission process.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateNonNullFields",
+  "summary" : "In summary, this code updates various fields in an `EncouragementReview` entity based on the corresponding values in a `DTO`. It checks for null values and performs different actions accordingly. The main logic is to copy over non-null values from the DTO to the entity, while using default values or performing conversions as needed.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "getAllEncouragementReviews",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this code is responsible for retrieving and processing encouragement reviews, filtering personnel by last name, setting properties on the `dto` object, and handling user roles.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "updateEncouragementAndReviewHasBeenSeen",
+  "summary" : "In summary, the business logic is:\n\n* If an encouragement has not been seen (or its status is not \"SENT FOR CORRECTION\"), then mark it as seen and save the update in the database.\n* In any case, update the encouragement review status using a service method.",
+  "calls" : [ "updateEncouragementReviewHasBeenSeen", "update" ]
+}, {
+  "methodName" : "getAllEncouragementForPunishments",
+  "isEntryPoint" : true,
+  "summary" : "In summary, the business logic is:\n\n- Filter encouragements based on certain criteria (file existence).\n- Set a list of encouragement DTOs for punishments if there are files associated with the encouragements.\n- Return this list of encouragement DTOs.\n\nThe decision-making is focused on filtering and setting the list of encouragement DTOs based on file existence.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getEncouragementFlow",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this code retrieves a list of encouragement flow details from reviews. For each review, it checks if the registrar organization ID is present, and if so, finds the corresponding personnel information. It then extracts reason titles and types, and creates a new `EncouragementFlowDetailDTO` instance with the relevant information.",
+  "calls" : [ "add", "findByOrganizationId" ]
+}, {
+  "methodName" : "getCountOfEncouragementReviewIncoming",
+  "isEntryPoint" : true,
+  "summary" : "In summary, this method is responsible for determining and reporting on the count of unseen encouragement reviews that require a specialist's attention. The method takes into account two primary roles: Personnel and Encouragement Specialist.\n\nFrom a business perspective, here's what the method does:\n\n* It processes information related to personnel organization IDs and review results/types based on the user's role.\n* For Personnel users, it adds specific review results and types to lists, indicating that these reviews need attention.\n* For Encouragement Specialists, it adds more specific review results and types to their respective lists, signifying a higher level of priority.\n\nThe method then constructs a search query using this processed information to retrieve encouragement reviews with specified criteria (organization ID, review results, and draft status).\n\nFinally, the method calculates and reports on the total number of unseen personnel encouragement reviews that require attention. This is done by retrieving the count of unseen reviews for the current user's organization and creating a report object to represent this count.\n\nIn essence, this method provides a snapshot of the number of encouragement reviews that need to be addressed by Personnel users or Encouragement Specialists, giving them visibility into their workload and enabling them to prioritize their tasks accordingly.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateExistEncouragement",
+  "summary" : "In summary, when this method is called, it updates an existing encouragement entity by copying relevant information from a review. The main action taken is setting the reason type ID, amount, and status of the encouragement based on the review's values.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllEducationalLevelGrades",
+  "summary" : "In summary, this method:\n\n1. Fetches educational level grades based on specified criteria (degree, activity status, and degree/rank)\n2. For each grade, checks if there's matching rank data available\n3. If no match is found, prints a message; otherwise, creates an EducationalLevelGradeDTO with the relevant information and adds it to the result list",
+  "calls" : [ "getAllRankWithCivilian" ]
+}, {
+  "methodName" : "createEducationalLevelGrade",
+  "summary" : "In summary, this Java method implements business logic for creating and managing educational level grades. The method performs the following key actions:\n\n1. Verifies whether an existing educational level grade degree already exists; if it does, throws an exception to prevent duplication.\n2. Creates a new educational level grade entity with specified properties: degree, rank type code, and active status.\n3. Saves the newly created entity to a repository for persistent storage.\n4. Converts the saved entity into a format suitable for data transfer (DTO) and returns it.\n\nIn essence, this method ensures the creation of unique educational level grades while maintaining data integrity and consistency.",
+  "calls" : [ "convertToDTO", "create" ]
+}, {
+  "methodName" : "updateEducationalLevelGrade",
+  "summary" : "In summary, this method checks for the existence of an educational level grade, ensures there's no duplicate degree, updates the existing entity based on incoming changes, and returns the updated entity.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "deleteEducationalLevelGrade",
+  "summary" : "In summary, this method represents the business logic of deleting an educational level grade. This process involves taking no conditions into account and solely focuses on removing the specified educational level grade.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "convertToDTO",
+  "summary" : "In summary:** The business logic in this code is to take an `EducationalLevelGrade` entity and create a corresponding `EducationalLevelGradeDTO`. The conversion involves setting various properties on the DTO, mostly by copying values from the entity. There is no conditional logic or decision-making beyond these property assignments.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "getRankLevelWithDegree",
+  "summary" : "In summary, the business logic is:\n\n* Find the educational level grade entity with the given degree.\n* If not found, raise an error.\n* Otherwise, convert the entity to a Data Transfer Object and return it.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getRankAndMaxAmount",
+  "summary" : "In summary, this code checks if the input degrees are valid, calculates the educational level grade and maximum amount, and returns an updated object. If any of these conditions fail, it throws exceptions to indicate errors or invalid inputs.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findByPersonnelIdList",
+  "summary" : "In summary, this method retrieves a list of personnel records based on a given set of IDs. It takes a list of unique identifiers as input, converts them into a string format, and creates a PersonnelDTO object that contains this ID list and additional type information. The method then sends an asynchronous request to a RabbitMQ service with the PersonnelDTO object to retrieve the corresponding personnel records. Upon receiving the response from RabbitMQ, the method returns the resulting list of PersonnelDTOs.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, this code is trying to find a specific personnel record using a unique ID and it's relying on an external service (`rabbitMQService`) to do so.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, the `findById` method is responsible for searching for a specific person record based on their unique identifier using the services of `rabbitMQService`.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findByOrganizationId",
+  "summary" : "In summary, the business logic here is about finding a BasePersonnelDTO by an organization ID and type using a service that interacts with RabbitMQ (a message broker).",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "findPageByOrgId",
+  "summary" : "In summary, the `findPageByOrgId` method retrieves personnel information (employee data) for multiple organizations based on a provided list of organization IDs. The method takes a collection of organization IDs as input and returns a corresponding set of personnel records, encapsulated in `PersonnelResponseDTO` objects.",
+  "calls" : [ "findPageByOrganizationIdList" ]
+}, {
+  "methodName" : "getFilteredPersonnel",
+  "summary" : "In summary, the `getFilteredPersonnel` method takes a `personnel` object as input and returns a filtered list of personnel objects that extend `BasePersonnelDTO`. This method delegates the filtering or retrieval operation to another service, specifically the `rabbitMQService`, which performs some logic on the provided input.",
+  "calls" : [ "filter", "listOfItems" ]
+}, {
+  "methodName" : "searchWithPersonnelDTO",
+  "summary" : "In summary, the business logic is:\n\n* Take a `personnel` object as input\n* Ask another service (`rabbitMQService`) to return a list of items based on this personnel information\n* Return this list of items to the caller\n\nNo conditions are being checked or decisions made; it's a straightforward data retrieval process.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getPersonnel",
+  "summary" : "In summary, the `getPersonnel` method processes personnel requests by sending a request to the system and waiting for an immediate response. The method handles potential timeouts or failures in the following way:\n\n- If the initial request is successful, the method returns the response without delay.\n- If the initial request times out, the method re-sends the request and waits for the response before returning it.\n- If even the re-sent request times out, the method throws a runtime exception indicating that the operation has failed.\n\nThe method's primary function is to retrieve personnel information in a timely manner while ensuring that requests are properly processed and responses are returned as expected.",
+  "calls" : [ "waitAndGetResponse", "send" ]
+}, {
+  "methodName" : "waitAndGetResponse",
+  "summary" : "In summary, this method is designed to wait for a response from a future until it's available or a timeout is reached. It repeatedly checks the status of the future and takes no action if it's not done yet. When the response is available, it retrieves and returns it. If the timeout is reached, it throws an exception.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllEncouragementTypes",
+  "summary" : "In summary, this code retrieves encouragement types from a repository, transforms each type object into an `EncouragementTypeDTO`, and returns the resulting list of `EncouragementTypeDTO` objects.",
+  "calls" : [ ]
+}, {
+  "methodName" : "create",
+  "summary" : "In summary, this code enforces the following business rules:\n\n1. The title cannot be blank or null.\n2. The title should not contain any instances of \"ی\" that are not replaced with \"ي\".\n3. The title cannot already exist in the database.\n4. A new entity is created and saved to the database if all conditions are met.\n\nNote that these rules are specific to the domain of encouraging types, and the code enforces these rules through a combination of validation, replacement, and uniqueness checks.",
+  "calls" : [ ]
+}, {
+  "methodName" : "update",
+  "summary" : "In summary, this method is responsible for updating an encouragement type entity in a repository. The business logic can be broken down into five key steps:\n\n1. If the encouragement type is not used in a reason type, it can be updated.\n2. Retrieve the encouragement type entity from the repository.\n3. Check if there's an existing entity with the same title as the one being updated.\n4. If an existing entity is found and no changes are being made to its active status or nature type, throw a `GeneralException`. Otherwise, update the entity and save it to the repository.\n5. If no existing entity is found, update the retrieved entity and save it to the repository.\n\nThe method makes decisions based on three key points:\n\n1. Whether the encouragement type is used in a reason type, which determines whether an update can be performed.\n2. Whether any changes are being made to an existing entity's active status or nature type, which affects whether the update is valid.\n3. Whether to throw a `GeneralException` when no changes are being made and an existing entity is found.\n\nOverall, this method ensures that updates are only performed when necessary and that inconsistencies are handled accordingly.",
+  "calls" : [ ]
+}, {
+  "methodName" : "isTypeUsedInReasonType",
+  "summary" : "In summary, this code determines whether an \"encouragement type\" is associated with a reason or not, and returns a yes/no answer based on that.",
+  "calls" : [ ]
+}, {
+  "methodName" : "delete",
+  "summary" : "In summary, this method ensures that a given type can be deleted from the repository only when there are no outstanding dependencies or usage of the type elsewhere. This means that if the type is not currently in use by any other process or function, it can be safely removed from the system. However, if the type has an existing connection or relationship with other types, deletion is prevented and a general exception is raised to indicate that the action cannot be performed due to external dependencies.",
+  "calls" : [ ]
+}, {
+  "methodName" : "filter",
+  "summary" : "In summary, this method filters and sorts encouragement types based on three business conditions. The first condition is that if a title is provided, it must match the title of the encouragement type. The second condition is that if an active status flag is provided, it must match the active status of the encouragement type. The third condition is that if a nature type is provided, it must match the nature type of the encouragement type.\n\nOnce filtered, the results are sorted in descending order by the updatedAt timestamp. Finally, the method returns the filtered and sorted results as a list of `EncouragementTypeDTO` objects, which contain essential information about each encouragement type, including its id, title, active status, nature type, and category code.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findTypeTitleById",
+  "summary" : "In summary, the code tries to find a reason type with a given ID, and if found, it looks up the encouragement type based on that reason type's ID. If both lookups are successful, it returns the title of the encouragement type; otherwise, it returns null.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, this method provides a business logic for searching and retrieving EncouragementType objects by their IDs. The process can be described as follows:\n\nWhen provided with an ID, the method attempts to locate the corresponding EncouragementType object in the repository. If the object is found, it is returned to the caller. However, if the ID does not match any existing EncouragementType object in the repository, a GeneralException is thrown indicating that the desired encouragement type was not found.\n\nAlternatively, if no ID is provided (i.e., null), the method throws another GeneralException stating that the input parameter is not valid. This highlights the importance of providing a valid ID to successfully retrieve or search for an EncouragementType object.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findIdByReasonTypeId",
+  "summary" : "In summary, the business logic of this code is:\n\n* If the input `reasonTypeId` is valid (not null), find and return an ID related to that reason type using the repository.\n* If the input `reasonTypeId` is invalid (null), throw an error indicating that the input is not valid.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getGradeTitle",
+  "summary" : "In summary, the \"getGradeTitle\" method retrieves the title of a grade based on its unique identifier by making an external API request. The process involves constructing a URL with a fixed prefix and the provided grade ID, then using this URL to obtain the corresponding grade title from a remote data source.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getPositionTitle",
+  "summary" : "In summary, the `getPositionTitle` method retrieves the title of a position associated with a given unique identifier (`positionId`) from an external API. This process involves constructing a URL by combining a fixed base URL and the provided `positionId`, then making a GET request to retrieve the corresponding position title. The method returns the retrieved position title as a string, without performing any calculations or modifying external data.",
+  "calls" : [ ]
+}, {
+  "methodName" : "init",
+  "summary" : "In summary, this method serves as a setup procedure for a filter, ensuring its proper initialization without executing any specific business logic or decision-making processes. Its primary function is to establish the filter's foundation, preparing it for further processing.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "doFilter",
+  "summary" : "In summary, the business logic is about configuring CORS settings for incoming requests by setting specific headers on the HTTP response.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "destroy",
+  "summary" : "In summary, this Java method, `destroy()`, is intended to execute a series of cleanup tasks when called, ensuring that any necessary processes are completed and resources are freed up. The method does not currently perform any specific actions or checks, serving as a placeholder for potential future cleanup logic if required by the business.",
+  "calls" : [ ]
+}, {
+  "methodName" : "createUser",
+  "summary" : "In summary, this code creates a new user in the User table if one does not already exist with the given username, and assigns it a unique ID until one is found that is not already used by another user.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "getCurrentUserProfile",
+  "summary" : "In summary, this method:\n\n1. Checks if a valid `TblUser` is present in the security context and sets the current user accordingly.\n2. If not, it decodes an access token to extract user information and creates or updates the user in the database.\n3. Populates the user's information associated with their organization ID.\n4. Returns the updated current user object.",
+  "calls" : [ "findByOrganizationId", "determineRoles", "create", "createUser" ]
+}, {
+  "methodName" : "changeProfile",
+  "summary" : "In summary, the code updates a user's profile with a new role only if that role is already part of their existing roles. If not, it leaves the profile unchanged.",
+  "calls" : [ ]
+}, {
+  "methodName" : "searchWithPersonnelDTO",
+  "summary" : "In summary, the business logic involves searching for personnel data based on provided filter criteria and then applying pagination settings to return a subset of the search results.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "listOfItems",
+  "summary" : "In summary, the business logic of this code is:\n\n* Send a request to RabbitMQ with a specific type.\n* If it succeeds, wait for the response.\n* If it times out, send another request with a different key and wait again.\n* If even this attempt fails, throw an exception, indicating something went wrong.",
+  "calls" : [ "waitAndGetResponse", "send" ]
+}, {
+  "methodName" : "listOfItems",
+  "summary" : "In summary, this code is designed to retrieve a list of personnel data from an external system using RabbitMQ. It takes into account filtering options provided by the caller and waits for a response before returning the data. If any errors occur during the process, it prints error messages and restores interrupted threads.",
+  "calls" : [ ]
+}, {
+  "methodName" : "waitAndGetResponse",
+  "summary" : "In summary, this code is waiting for an asynchronous operation to complete, and if it doesn't complete within a certain timeframe, it will time out and throw an exception.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, this method retrieves personnel data from an external source and sets properties on a PersonnelDTO object based on the input parameters.\n\nThe method:\n\n1. Sets the type of PersonnelDTO based on the provided type or defaults to a predefined value if null.\n2. Populates the PersonnelDTO with person ID and organization ID values if they are not null.\n3. Sends a request via RabbitMQ to retrieve personnel data, waiting for the response within a timeout period.\n4. Handles interruptions and errors during the wait period by logging exceptions and restoring the interrupted status.\n5. Once the response is received, returns the first PersonnelDTO from the list of results.\n\nThis method represents the business logic of retrieving and processing personnel data, handling potential issues along the way, and returning the resulting information in a usable format.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findPageByOrganizationIdList",
+  "summary" : "In summary, the `findPageByOrganizationIdList` method is responsible for retrieving personnel data from an external system and filtering it by organization IDs when provided. Here are the key business processes involved:\n\n* When a list of organization IDs is provided, the system uses those IDs to filter the personnel data.\n* The system sends a request to the external system (likely using RabbitMQ) and waits for a response.\n* If the response is received within a specified timeout period, the system retrieves the result and stops waiting.\n* If an error occurs during execution, the system logs the issue and ensures that the thread is properly interrupted.\n* The method returns the filtered personnel data when the asynchronous operation completes or reaches the timeout.\n\nThis method appears to be designed to retrieve and filter personnel data based on organization IDs, with built-in error handling and timeouts to ensure reliable execution.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, the business logic and decision-making in this Java code involve:\n\n1. Waiting for a future (promise) to complete or reaching a timeout.\n2. Handling exceptions that occur during execution.\n3. Returning a PersonnelDTO object from the response DTO's list of PersonnelDTOs.",
+  "calls" : [ ]
+}, {
+  "methodName" : "filter",
+  "summary" : "In summary, this Java code filters a list of `EncouragementReason` objects based on two conditions:\n\n* The title matches the given string.\n* The object is either active or inactive (depending on the value of `active`).\n\nThe resulting filtered list is then paginated and returned.",
+  "calls" : [ ]
+}, {
+  "methodName" : "create",
+  "summary" : "In summary, the business logic is:\n\n1. Clean up the title by replacing a specific character and removing extra spaces.\n2. Check if a matching title already exists in the database. If it does, throw an exception.\n3. If no match is found, create a new entity based on the provided data and save it to the database.\n\nThe overall purpose of this code is to validate and process an encouragement reason title, ensuring that any duplicates are handled correctly.",
+  "calls" : [ "validate" ]
+}, {
+  "methodName" : "update",
+  "summary" : "In summary, this method updates an `EncouragementReason` entity if it's not used in a reason type. It checks for duplicate titles and activation status changes, and throws exceptions accordingly. If the reason is used in a reason type, it simply throws an exception indicating that editing is not allowed.",
+  "calls" : [ "isReasonUsedInReasonType" ]
+}, {
+  "methodName" : "isReasonUsedInReasonType",
+  "summary" : "In summary, this method verifies if a certain encouragement reason exists in the system and returns a boolean indicating its existence or non-existence.",
+  "calls" : [ ]
+}, {
+  "methodName" : "delete",
+  "summary" : "In summary, the code checks if a reason is being used before deleting it. If it's not being used, the deletion is performed and a success message is returned. If it is being used, an exception is thrown to prevent the deletion from occurring.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findReasonTitleById",
+  "summary" : "In summary, the business logic is:\n\n* If a valid `reasonTypeId` is provided and it corresponds to an existing `EncouragementReasonType` with a non-null `encouragementReasonId`, then:\n\t+ Get the related `EncouragementReason` object.\n\t+ Return its title if found, otherwise return null.\n\nThe method essentially performs a lookup based on the provided `reasonTypeId` and returns the relevant reason title or null if not found.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findReasonById",
+  "summary" : "In summary, this method finds a reason type by its ID and then looks up the associated encouragement reason ID. If both are found, it returns the ID of that encouragement reason; otherwise, it returns `null`.",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "findTypeById",
+  "summary" : "In summary, this method is designed to retrieve a specific reason type based on its ID and then determine the corresponding type of encouragement. If either step fails (no record found or no valid `encouragementTypeId`), it returns null.",
+  "calls" : [ ]
+}, {
+  "methodName" : "createOrUpdateQuranicEncouragement",
+  "summary" : "In summary, this method implements a process for creating or updating a Quranic Encouragement record while ensuring that relevant information is accurately captured and stored. The process involves the following key steps:\n\n* Verifying whether an existing encouragement record exists by checking if the provided ID is valid. If it does exist, the system retrieves the corresponding record from the repository.\n* Based on the input data, setting various fields in the encouragement record, including Quranic Seniority ID, Related Personnel ID, and Amount.\n* Managing attachments for the encouragement, either by adding new ones or removing existing files as necessary.\n* Ensuring that any previously associated files are deleted when the encouragement record is updated.\n\nIn essence, this method streamlines the creation and updating of Quranic Encouragement records while maintaining accurate data integrity and ensuring seamless file management.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "getQuranicEncouragements",
+  "summary" : "In summary, this method retrieves Quranic Encouragements based on input criteria. It performs the following business actions:\n\n1. Filters Quranic Encouragements by seniority ID, amount, creation date, registrar ID, or related personnel ID, if applicable input values are provided.\n2. Applies these filters to a Specification object, allowing for conditional search criteria.\n3. Executes the filtered search using the repository, retrieving a list of Quranic Encouragement entities that meet the specified conditions.\n4. Converts the retrieved entities into Quranic Encouragement Data Transfer Objects (DTOs) and returns them as a list.\n\nIn essence, this method enables the retrieval of Quranic Encouragements based on specific criteria, facilitating business decision-making or reporting requirements.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "convertToQuranicEncouragementDTO",
+  "summary" : "In summary:\n\n* The method converts a `QuranicEncouragement` object to a `QuranicEncouragementDTO` object.\n* It sets several properties of the `QuranicEncouragementDTO` based on corresponding properties of the `QuranicEncouragement`.\n* For the `registrarPersonnelId` and `relatedPersonnelId` properties, if they are not null, it calls a service to find the personnel ID by the provided list of IDs, filters the result to ensure it's not empty, and sets the first element as the property value.",
+  "calls" : [ "filter", "findByPersonnelIdList" ]
+}, {
+  "methodName" : "deleteQuranicEncouragement",
+  "summary" : "In summary, the business logic of this code is:\n\n1. Check if a Quranic Encouragement exists; if not, throw an exception.\n2. If it exists, retrieve all attachments related to that encouragement.\n3. Delete each of those attachments.\n\nThe overall action taken is to delete a Quranic Encouragement and its associated attachments, ensuring the integrity of the data.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "getQuranicEncouragementById",
+  "summary" : "In summary, this method is designed to retrieve a specific QuranicEncouragement entity based on its unique identifier (UUID). It doesn't make any decisions or perform calculations; it simply returns an Optional object containing the requested entity.",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "getList",
+  "summary" : "In summary, the code:\n\n1. Sets personnel information based on rank type codes.\n2. Filters personnel entries to match specific criteria.\n3. Applies the filtered personnel information to the original results.\n4. Populates person information and attachment files for each item in the list.\n5. Returns the final result list with updated information.",
+  "calls" : [ "getPersonnel", "getFilteredPersonnel" ]
+}, {
+  "methodName" : "getQuranicEncouragementAmountByPersonnelOrganizationId",
+  "summary" : "In summary, the business logic is:\n\n1. Check if there are any Quranic Encouragement objects associated with a given organization ID.\n2. If no data is found, return an empty list indicating that there is no data to process further.\n3. If data is found, calculate and return the total amount of Quranic Encouragement for that organization ID.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "send",
+  "summary" : "In summary**, this method initiates the sending of a request message, which involves setting the request queue name based on whether an initial key was provided, creating a unique correlation ID for the request, and storing relevant details in a map. The method then generates a JSON payload from the personnel data and sends it to the designated request queue for further processing. If any errors occur during this process, the method catches and prints debug messages before returning null.",
+  "calls" : [ "getActiveRequestQueueName", "update" ]
+}, {
+  "methodName" : "getActiveRequestQueueName",
+  "summary" : "In summary, the business logic is as follows:\nWhen there are queues available (i.e., `queueRepository.findAll().size() != 0`), it checks if the queue properties and consumer name match. If they don't, it resets the personnel DTO's consumer name, deletes all queues, and returns a specific key.\nIf there are no queues or the conditions in the innermost if-else block aren't met, it sets the personnel DTO's consumer name and returns another specific key.\n\nIn simpler terms, this code is managing RabbitMQ queues and consumers. It ensures that when new queues are created, they have the correct properties and consumer names. If not, it resets everything to its initial state.",
+  "calls" : [ ]
+}, {
+  "methodName" : "receiveMessage",
+  "summary" : "In summary, the business logic involves:\n\n1. Processing a received message:\n\t* Completing any existing `Future` for the specific `correlationId`.\n\t* Adding a new queue to RabbitMQ based on certain conditions.\n2. Handling missing or invalid responses:\n\t* Printing error messages if no `future` is found or if the response is invalid.\n\nThese actions are performed in response to receiving a message, processing the response, and handling any errors that may occur during this process.",
+  "calls" : [ ]
+}, {
+  "methodName" : "generateCorrelationId",
+  "summary" : "In summary, this method simply generates a unique correlation ID using Java's built-in UUID functionality.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getMaxSeniority",
+  "summary" : "In summary, this Java method retrieves and returns the maximum seniority level available in the system, which is defined as a constant `MAX_SENIORITY`. This method does not involve any conditions, decisions, or processing of data; it simply provides access to the pre-defined maximum seniority value.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateMaxSeniority",
+  "summary" : "In summary, the `updateMaxSeniority` method updates the maximum seniority record or metric by setting its value to a given input. This means that when this method is called with a new maximum seniority value, it will replace the existing value with the new one, ensuring that the maximum seniority record remains accurate and up-to-date.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "createQuranicSeniority",
+  "summary" : "In summary, the business logic checks for:\n\n1. Empty or null Quranic Seniority Type.\n2. Replaces \"ی\" characters with \"ي\" and trims the type.\n3. Searches for an existing entity by type and amount.\n4. Checks if the found entity matches the input data (type, amount, and either active status or maximum amount).\n5. If a match is found, throws an exception.\n6. Creates a new Quranic Seniority entity and validates it.\n\nThe final result depends on whether an entity was found matching the input data or not.",
+  "calls" : [ "createQuranicSeniorityAfterValidation", "validate" ]
+}, {
+  "methodName" : "createQuranicSeniorityAfterValidation",
+  "summary" : "In summary, this code takes an existing Quranic Seniority and updates its fields based on the values provided in a separate object (`dto`). The goal is to reflect any changes from the `dto` in the `entity`.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "updateQuranicSeniority",
+  "summary" : "In summary, this code checks for the following conditions:\n\n1. If a QuranicSeniority entity exists with matching type, amount, and either active or max amount as the input DTO.\n2. If the entity ID is different but the type and amount are the same (throw an exception).\n3. If the entity is already marked as active (throw an exception).\n4. If no changes are detected (throw an exception).\n\nThe business logic appears to be updating QuranicSeniority entities based on input DTOs, with certain conditions checked to ensure data consistency and prevent invalid updates.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getQuranicSeniorities",
+  "summary" : "In summary, this method gets a list of Quranic Seniorities based on multiple criteria:\n\n* Type (e.g., seniority level)\n* Amount\n* Maximum amount range\n* Status (active or not)\n\nThe code uses a combination of these filters to retrieve the desired Quranic Seniorities.",
+  "calls" : [ ]
+}, {
+  "methodName" : "deleteQuranicSeniority",
+  "summary" : "In summary, the business logic is:\n\n* Check if a Quranic seniority record exists with the given ID.\n* If it exists, throw an exception indicating that deletion is not possible because it's already registered in Quranic Encouragements.\n* If no record exists, delete the Quranic seniority.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "getQuranicSeniorityById",
+  "summary" : "In summary, the `getQuranicSeniorityById` method is responsible for retrieving Quranic Seniority information based on a unique identifier (ID). The method takes an ID as input and uses a repository or database to find and retrieve the corresponding Quranic Seniority information. The result is returned as an `Optional` object, representing a possible outcome.",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "receiveMessage",
+  "summary" : "In summary, the `receiveMessage` method captures messages from an \"initial_queue\" and records the receipt of those messages in a visible log, providing transparency on the message contents. This process-oriented method does not involve conditional evaluations or specific business decisions; its primary function is to document incoming messages for monitoring purposes.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getRegistrarPowerLimitsWithExternalData",
+  "summary" : "In summary, this method retrieves filtered data, groups it by type ID, creates or updates `registrarPowerLimitsDTO` objects based on personnel group information, and finally returns a list of these DTOs.",
+  "calls" : [ "filter", "create" ]
+}, {
+  "methodName" : "getPowerTypesDTO",
+  "summary" : "In summary, this code retrieves information from the database, initializes a `PowerTypesDTO` object with relevant data, and handles null values for certain properties.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "saveRegistrarPowerLimits",
+  "summary" : "In summary, this method, saveRegistrarPowerLimits, enables the management of personnel group power limits for various types. It is responsible for processing requests related to adding or updating existing limits, as well as deleting them.\n\nThe method first checks if a personnel group ID is provided and retrieves the corresponding group. If no group is found, it throws an exception indicating that the group was not found. If the group exists but is inactive, another exception is thrown stating that the group is not active.\n\nNext, it processes any types to add or update by iterating through each type in the list. For each type, it checks if a limit already exists for that type and personnel group. If it does, the method updates the existing limit with new values and saves it. If no existing limit is found, it creates a new one with the provided values and saves it.\n\nAdditionally, the method processes any types to delete by iterating through each ID in the list. For each ID, it checks if a limit exists for that type and personnel group. If it does, the method deletes the limit. If no existing limit is found, it logs a warning message indicating that the type does not exist.\n\nFinally, if no types are provided to add or update but the list is not empty, the method throws an exception stating that at least one type and amount must be selected. It also processes any types to delete if they were provided.",
+  "calls" : [ "add", "update", "create", "delete" ]
+}, {
+  "methodName" : "getThisPersonnelOrganizationIdGroupAndEncouragementTypeId",
+  "summary" : "In summary, this method retrieves a list of personnel groups for a given organization ID, gets the reference associated with each group, finds the group that matches the given encouragement type ID, and returns the matched group's details. If either `orgId` or `typeId` is null, it throws a GeneralException.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getEncouragementReviewsWithSpecification",
+  "summary" : "In summary, this business logic retrieves and filters a list of encouragement reviews based on specified search criteria and pagination settings. The method accepts two inputs: a set of search criteria (defined in an EncouragementReviewSearchDTO) and pagination settings (represented by a pageRequest). The output is a paginated list of encouragement reviews that meet the defined search criteria, considering factors such as author, status, and other conditions.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "add",
+  "summary" : "In summary, the method `add(EncouragementReview encouragement)` captures and stores encouraging feedback, also known as an \"encouragement review\", in a database or storage system. The process involves accepting a new review as input, processing it, and then returning the stored review as output, allowing for easy retrieval and management of such feedback.",
+  "calls" : [ ]
+}, {
+  "methodName" : "add",
+  "summary" : "In summary, this method is simply a wrapper around the `repository`'s `saveAll` method, which takes care of persisting the given list of `EncouragementReview` objects.",
+  "calls" : [ ]
+}, {
+  "methodName" : "changeEncouragementReviewStatus",
+  "summary" : "In summary, this method changes the status of an encouragement review by updating its result and applied date, while also marking the review as seen in the repository without affecting any timestamps.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "deleteEncouragementReview",
+  "summary" : "In summary, the `deleteEncouragementReview` method removes an existing encouragement review from the system's data repository when provided with a unique identifier. This method does not perform any additional actions beyond deleting the review record based on the input ID. The primary business objective of this method is to eliminate or purge outdated or obsolete reviews from the database, ensuring that the system remains accurate and up-to-date.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllCommissionReviewsForThisEncouragement",
+  "summary" : "In summary:\n\nThe `getAllCommissionReviewsForThisEncouragement` method retrieves a list of reviews related to a specific encouragement that have been classified as \"Ordinary Commission\" reviews. This method returns all commission reviews for this encouragement, provided it meets the criteria of being an \"Ordinary Commission\" review and matching the specified encouragement ID. If the conditions are not met, no reviews are returned. The purpose of this method is to provide a list of relevant commission reviews for a specific encouragement when the required criteria are satisfied.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllVedjaReviewsForThisEncouragement",
+  "summary" : "In summary, the business logic is: find all reviews for a specific encouragement that have a certain type (\"Vedja Commission\") and status (\"Under Vedja Review\").",
+  "calls" : [ ]
+}, {
+  "methodName" : "convertToDTO",
+  "summary" : "In summary, the business logic involves:\n\n1. Retrieving reason types and reasons based on given IDs.\n2. If a reason type is found, extracting its ID and title.\n3. Creating an EncouragementReviewDTO with various attributes from the entity and the retrieved reason types.\n\nNote that I've omitted method parameters, variable values, and input details as per your request.",
+  "calls" : [ "create" ]
+}, {
+  "methodName" : "getEncouragementReason",
+  "summary" : "In summary, the getEncouragementReason method retrieves an encouragement reason from a repository based on its type ID, without performing any evaluations or actions beyond this lookup process.",
+  "calls" : [ ]
+}, {
+  "methodName" : "findById",
+  "summary" : "In summary, the business logic here is:\n\n* Search for an encouragement review by its ID.\n* If found, return the review.\n* If not found, throw an exception indicating that the review was not found.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType",
+  "summary" : "In summary, the business logic is to retrieve a review related to an encouragement, but only if it's currently under review by a specified registrar organization and reviewer type.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getReviewOfThisRegistrarThisEncouragementWithReviewerType",
+  "summary" : "In summary, this code retrieves a list of reviews related to an encouragement and a registrar organization, filtered by review type, and returns them in descending order by creation date.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getReviewOfThisRegistrarThisEncouragement",
+  "summary" : "In summary**, the `getReviewOfThisRegistrarThisEncouragement` method retrieves a specific EncouragementReview associated with a particular registrar organization and encouragement. It does this by searching for the review based on the provided IDs, and returns the result wrapped in an Optional object. If no matching review exists, it returns an empty Optional.\n\nIn essence, this method serves as a lookup or retrieval process that finds a specific EncouragementReview given its organizational context and identification.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getLastReviewForEncouragement",
+  "summary" : "In summary, this method finds all reviews associated with an encouragement ID, filters out empty or null descriptions, and returns them as a string. If no reviews are found, it returns `null`.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "updateEncouragementReviewHasBeenSeen",
+  "summary" : "In summary, this code updates the \"seen\" status for certain encouragement reviews based on the following conditions:\n\n1. There must be at least one review.\n2. The current user's organization ID matches the reviewer's organization ID.\n3. The last review in `reviewList` is not a VEDJA Commission or an Ordinary Commission.\n4. There is a previous review that meets certain conditions (previous organization ID matches the current user's organization ID, result is \"SENT_FOR_RECENT_MANAGER_CORRECTION\", and registrar organization ID does not match the encouragement's organization ID).\n5. There is a next review that meets certain conditions (registrar organization ID matches the previous review's organization ID, and result is not \"UNDER_REVIEW\").\n\nIf all these conditions are met, it marks all reviews in `reviewList` as seen.",
+  "calls" : [ ]
+}, {
+  "methodName" : "updateExistEncouragementReview",
+  "summary" : "In summary, this code updates an existing encouragement review with new information from another encouragement object. If the organizations are the same, it uses the values from the second encouragement object to update the review. Otherwise, it simply updates the review's reason type and amount and saves the changes.",
+  "calls" : [ "update" ]
+}, {
+  "methodName" : "updateSentForRegistrarEncouragementReviewHasBeenSeen",
+  "summary" : "In summary, the method checks if there are any reviews for an encouragement and if they were sent for registrar correction. If so, it marks those reviews as \"seen\".",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "addAttachment",
+  "summary" : "In summary, if a valid file is provided, the method creates an Attachment entity, sets its properties based on the file contents, and saves it to the database. If no file is provided, it throws an exception indicating that the input is invalid.",
+  "calls" : [ ]
+}, {
+  "methodName" : "addAllAttachments",
+  "summary" : "In summary, the `addAllAttachments` method is responsible for processing a list of files and adding them as attachments to a system. When a valid list of files is provided, the method creates an attachment entity for each file, sets the attachment name to the original filename, encodes the file bytes into Base64 format, and saves the attachment to the database. If no files are provided (i.e., `fileList` is null), the method throws an exception indicating that the input parameter is invalid.",
+  "calls" : [ ]
+}, {
+  "methodName" : "addAttachmentForEncouragement",
+  "summary" : "In summary, this method adds attachments to an entity for encouragement purposes. The business logic involves:\n\n* Verifying three conditions related to file attachment IDs and setting corresponding attributes on the entity object if they exist.\n* Creating a new entity object for each file in the list and setting attributes based on the conditions above.\n* Adding each entity object to a list of attachments.\n\nThe method also checks two conditions regarding the input parameters:\n\n* If both the file list and file attachment DTO are not null, it creates a list of attachments, adds files, saves them in the database, and returns the list.\n* If either the file list or file attachment DTO is null, it throws a GeneralException with an error message indicating invalid input parameters.\n\nIn essence, this method handles the process of attaching files to entities for encouragement purposes, ensuring that valid input parameters are provided.",
+  "calls" : [ "add", "create" ]
+}, {
+  "methodName" : "deleteAttachment",
+  "summary" : "In summary, the business logic is:\n\n* If the input ID is not null and the attachment doesn't exist in Grade Encouragement or Quranic Encouragement, delete the attachment\n* If the input ID is not null but the attachment exists in either Grade Encouragement or Quranic Encouragement, do nothing\n* If the input ID is null, throw an exception",
+  "calls" : [ "checkExistsInGradeEncouragement", "checkExistsInQuranicEncouragement", "delete" ]
+}, {
+  "methodName" : "getAttachmentById",
+  "summary" : "In summary, this method checks if a valid `id` is provided. If so, it retrieves the corresponding attachment, decodes its file, and returns it. If no valid `id` is provided, it throws an exception indicating invalid input.",
+  "calls" : [ ]
+}, {
+  "methodName" : "checkExistsInQuranicEncouragement",
+  "summary" : "In summary, the business logic checks:\n\n1. If an attachment ID is provided.\n2. If the attachment with that ID exists in Quranic Encouragement.\n\t* If it doesn't exist, return false.\n\t* If it does exist, prevent deletion or editing due to its existing usage in Quranic Encouragement.\n\nIf no attachment ID is provided, the function throws an exception saying \"Invalid input parameter\".",
+  "calls" : [ ]
+}, {
+  "methodName" : "checkExistsInGradeEncouragement",
+  "summary" : "In summary, this method verifies whether a specific attachment exists in Grade Encouragement and determines its availability for modification or deletion based on its existence.\n\nHere are the key business logic statements:\n\n* The method checks if an attachment with a given ID exists within Grade Encouragement. If it doesn't exist, the result is considered invalid.\n* If the attachment does exist, it is deemed unavailable for modification or deletion due to prior use.\n* If no attachment ID is provided, the input is deemed invalid, and an error is reported.\n\nOverall, this method serves as a gatekeeper, ensuring that attachments are properly managed within Grade Encouragement and preventing potential errors or inconsistencies.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllAttachmentsWithoutFileContent",
+  "summary" : "In summary, this business logic involves no complex conditions or decision-making. It's a straightforward retrieval of all attachments without their file content based on the provided pagination settings.\n\nIf you have any further questions or would like me to clarify anything, please feel free to ask!",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllEncouragementAttachments",
+  "summary" : "In summary, this method retrieves and processes attachment files related to various types of encouragement (grade, Quranic, review, and general). The method's primary function is to gather attachments based on specific IDs or categories and then update key properties for each file.\n\nThe method checks for the presence and validity of attachments, ensuring that there are no null or empty results. If attachments are found, it iterates over each file, updating its original value and calculating its size in megabytes.\n\nUltimately, this method returns a list of processed attachment files, providing an updated set of data that reflects the relevant encouragement categories and file details.",
+  "calls" : [ "delete" ]
+}, {
+  "methodName" : "deleteAttachmentFile",
+  "summary" : "In summary, the business logic deletes a specific attachment file based on its unique identifier (id) by:\n\n* Verifying the existence of the attachment with the specified id\n* If the attachment is found, deleting it from the database\n* If the attachment is not found, raising an error indicating \"File not found\"\n\nThis method ensures that only valid attachments are deleted, and provides a clear indication if an attempt is made to delete a non-existent file.",
+  "calls" : [ "findById", "delete" ]
+}, {
+  "methodName" : "createOrUpdateGradeEncouragement",
+  "summary" : "In summary, this method creates or updates a GradeEncouragement entity based on provided data. The method's primary business logic involves processing various attributes of the GradeEncouragement entity, including:\n\n* Calculating new grades and seniority amounts when necessary to reflect changes\n* Updating effective dates as needed\n* Managing attachments by adding or removing files from the entity\n\nThe method also handles scenarios where no GradeEncouragement entity exists (i.e., null input), in which case it throws an exception. Overall, this method is responsible for updating or creating a GradeEncouragement entity and its associated attributes based on provided data.",
+  "calls" : [ "getMaxAmountWithLastDegreeAndNewDegree", "getRankAndMaxAmount", "update", "create" ]
+}, {
+  "methodName" : "deleteGradeEncouragement",
+  "summary" : "In summary, the business logic is:\n\n* Check if a record exists with the given ID. If not, throw an exception.\n* If the record exists, delete it and then recursively delete all associated attachments.",
+  "calls" : [ "getAllEncouragementAttachments", "delete", "deleteAttachment" ]
+}, {
+  "methodName" : "getGradeEncouragementById",
+  "summary" : "In summary, this method retrieves a specific Grade Encouragement record from a database based on its unique identifier. It performs a simple search for a record matching the provided ID and returns the result as an optional value, indicating whether the record was found or not.",
+  "calls" : [ "findById" ]
+}, {
+  "methodName" : "getList",
+  "summary" : "In summary, this code is processing a list of Grade Encouragement entries, filtering them based on various criteria (personnel rank type codes, personnel filter, and new grade titles), and returning a paginated list of filtered entries.",
+  "calls" : [ "filter", "getPersonnel", "findById", "getFilteredPersonnel" ]
+}, {
+  "methodName" : "getResults",
+  "summary" : "In summary, the getResults method filters and retrieves personnel group data based on user input. The method takes two inputs - orgId and lastName. If an orgId is provided, it creates a new list with the given orgId. If a lastName is provided, it performs a search using the personnel service to retrieve a list of base personnel DTOs. In both cases, the method filters data based on user input (orgId or lastName). If no results are found, the method returns an empty list.",
+  "calls" : [ ]
+}, {
+  "methodName" : "convertEntityToDTO",
+  "summary" : "In summary, this code is taking a group entity and converting it into a data transfer object while also retrieving a list of personnel for each organizational ID associated with the group, if any.",
+  "calls" : [ ]
+}, {
+  "methodName" : "processPersonnelGroupRequest",
+  "summary" : "In summary, this method processes personnel group requests by either creating a new group based on a provided name or updating an existing group's information. It enforces validation rules for the group's name, active status, and org ID list, ensuring that changes are consistent and accurate.",
+  "calls" : [ "create", "update", "validate" ]
+}, {
+  "methodName" : "validate",
+  "summary" : "In summary, the \"validate\" method ensures that personnel groups have not been assigned existing power limits before proceeding. If a personnel group has defined power limits, the system raises an error to notify that these limits are already in place and cannot be updated or modified further. This validation step prevents potential conflicts or inconsistencies in assigning power limits to personnel groups.",
+  "calls" : [ ]
+}, {
+  "methodName" : "deletePersonnelGroup",
+  "summary" : "In summary, the business logic and decision-making in this code are:\n\n* If a personnel group with the given id is not found, throw an exception.\n* Validate the retrieved personnel group.\n* Delete the validated personnel group.",
+  "calls" : [ "validate" ]
+}, {
+  "methodName" : "getReferenceById",
+  "summary" : "In summary, this method retrieves a Personnel Group object by its unique identifier (UUID). The method takes a personnel group ID as input and returns the corresponding Personnel Group reference from the repository. This is a straightforward lookup operation with no conditions or decisions made.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getPersonnelGroupByOrgId",
+  "summary" : "In summary**, this method retrieves and returns a list of personnel groups associated with a specific organization ID. It takes an organization ID as input and provides a comprehensive list of all personnel groups related to that organization.",
+  "calls" : [ ]
+}, {
+  "methodName" : "addAttachment",
+  "summary" : "In summary, this method checks that a file is not empty and of a valid type (CSV or TXT), and then either proceeds with further processing or throws an exception if these conditions are not met.",
+  "calls" : [ "add" ]
+}, {
+  "methodName" : "addAllAttachments",
+  "summary" : "In summary, this code adds all files from the input list to another list if the list is not empty and each file in the list exists and has a non-zero size.",
+  "calls" : [ "add" ]
+}, {
+  "methodName" : "addAttachmentForEncouragement",
+  "summary" : "In summary, if no files are provided, an exception is thrown. If files are provided but `gradeEncouragementId` is null, an exception is also thrown. Otherwise, the code creates a list of attachments and returns it.",
+  "calls" : [ ]
+}, {
+  "methodName" : "deleteAttachment",
+  "summary" : "In summary, the `deleteAttachment` method removes a specific attachment from a system. The method takes a unique identifier for the attachment as input and checks whether the deletion is successful.\n\nIf the deletion is successful, it marks the attachment as deleted or removes it from the database.\n\nIf the deletion fails, it logs an error or notifies the user that the attachment could not be deleted.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAttachmentById",
+  "summary" : "In summary, this method verifies the existence and integrity of an attachment based on its ID. It checks if the requested attachment:\n\n* Exists in the system\n* Has not been deleted\n* Matches a previously retrieved attachment\n\nIf all conditions are met, it returns the original attachment. If any condition is not met (i.e., the attachment does not exist, has been deleted, or does not match the retrieved attachment), the method returns null, indicating that the requested attachment cannot be verified or does not meet the criteria.",
+  "calls" : [ ]
+}, {
+  "methodName" : "checkExistsInQuranicEncouragement",
+  "summary" : "In summary:\n\nThe `checkExistsInQuranicEncouragement` method checks if a specific attachment ID exists within a Quranic encouragement. This is done by first verifying a certain condition, and if it's met, the method then searches for the existence of the attachment ID in the Quranic encouragement.\n\nIf the attachment ID is found, the method takes some unknown action. If not, it takes another unknown action. The condition being checked is separate from the attachment ID search, as there are two distinct IF-ELSE blocks: one that checks the condition and another that checks if the attachment ID exists within the Quranic encouragement.\n\nIn essence, this method serves as a gatekeeper, ensuring that certain criteria are met before proceeding with subsequent actions.",
+  "calls" : [ ]
+}, {
+  "methodName" : "checkExistsInGradeEncouragement",
+  "summary" : "In summary, the business logic of this method can be described as follows:\n\n* Check if an attachment with a given ID exists in Grade Encouragement. If it does, assume it exists.\n* If the attachment doesn't exist or if some other condition is met (unknown from the snippet), assume the attachment does not exist.\n\nPlease note that I'm focusing only on the business logic and decision-making aspects of this code snippet, without delving into the specifics of method parameters, variable values, or input inputs.",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllAttachmentsWithoutFileContent",
+  "summary" : "In summary:\n\nThe `getAllAttachmentsWithoutFileContent` method filters attachments based on their content types. It excludes attachments without a valid content type (either \"application/\" or \"text/\"). Additionally, it handles the first page of size 10 uniquely, with special logic applied in this scenario.\n\nKey business decisions and actions:\n\n* Exclude attachments without a valid content type\n* Include attachments with application/content types (\"application/\")\n* Include attachments with text/content types (\"text/\")\n* Special handling for the first page of size 10, which requires unique processing",
+  "calls" : [ ]
+}, {
+  "methodName" : "getAllEncouragementAttachments",
+  "summary" : "In summary, this method retrieves attachments based on their types (only encouragement or all) and applies a filtering condition depending on the value of `b`.",
+  "calls" : [ "filter" ]
+}, {
+  "methodName" : "deleteAttachmentFile",
+  "summary" : "In summary, this method, `deleteAttachmentFile`, is responsible for deleting an attachment file based on a given ID. When a valid ID is provided, the system attempts to delete the corresponding file. If the ID does not exist in the database or other conditions are not met, no file deletion occurs.",
+  "calls" : [ "delete" ]
+} ]

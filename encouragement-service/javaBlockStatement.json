@@ -1,0 +1,737 @@
+{
+  "getPersonnelListEncouragement / if (Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.EXECUTIVE_MANAGER))": [
+    "PersonnelDTO personnelDto \u003d PersonnelDTO.builder().personnelUnitCode(personnelDTO.getPersonnelUnitCode()).type(typeOfPersonnelDTOSending).build();",
+    "resultResponse \u003d personnelService.getPersonnel(personnelDto);"
+  ],
+  "getPersonnelListEncouragement / if (Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST))": [
+    "PersonnelDTO personnelDto \u003d PersonnelDTO.builder().type(typeOfPersonnelDTOSending).build();",
+    "resultResponse \u003d personnelService.getPersonnel(personnelDto);"
+  ],
+  "getPersonnelListEncouragement / else": [
+    "if (Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.EXECUTIVE_MANAGER)) {\r\n    PersonnelDTO personnelDto \u003d PersonnelDTO.builder().personnelUnitCode(personnelDTO.getPersonnelUnitCode()).type(typeOfPersonnelDTOSending).build();\r\n    resultResponse \u003d personnelService.getPersonnel(personnelDto);\r\n}"
+  ],
+  "getPersonnelListEncouragement / if (resultResponse.getPersonnelDTOList() !\u003d null)": [
+    "filteredList \u003d resultResponse.getPersonnelDTOList().stream().filter(eachPersonnelDTO -\u003e isMatching((PersonnelDTO) eachPersonnelDTO, dto)).collect(Collectors.toList());",
+    "resultResponse.setPersonnelDTOList(filteredList);"
+  ],
+  "isMatching / if (!person.getPersonnelFirstName().contains(filter.getEncouragedPersonFirstName()))": [
+    "return false;"
+  ],
+  "isMatching / if (filter.getEncouragedPersonFirstName() !\u003d null)": [
+    "filter.setEncouragedPersonFirstName(filter.getEncouragedPersonFirstName().replace(\"ی\", \"ي\").trim());",
+    "//            filter.setPersonnelFirstName(filter.getPersonnelFirstName().replace(\"گ\", \"گ\"));\r\nif (!person.getPersonnelFirstName().contains(filter.getEncouragedPersonFirstName()))\r\n    return false;"
+  ],
+  "isMatching / if (!person.getPersonnelLastName().contains(filter.getEncouragedPersonLastName()))": [
+    "return false;"
+  ],
+  "isMatching / if (filter.getEncouragedPersonLastName() !\u003d null)": [
+    "filter.setEncouragedPersonLastName(filter.getEncouragedPersonLastName().replace(\"ی\", \"ي\").trim());",
+    "if (!person.getPersonnelLastName().contains(filter.getEncouragedPersonLastName()))\r\n    return false;"
+  ],
+  "getPunishmentListOfThisServiceUnit / if (personnelOrgIdRegistrarLastName.isEmpty())": [
+    "return EncouragementAndPunishmentDTO.builder().punishmentList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e(), pageable, 0)).build();"
+  ],
+  "getPunishmentListOfThisServiceUnit / else": [
+    "personnelOrgIdPunishedLastName.retainAll(personnelOrgIdList);",
+    "filterDTO.setPunishmentPersonnelOrganizationIdList(personnelOrgIdPunishedLastName);"
+  ],
+  "getPunishmentListOfThisServiceUnit / if (filterDTO.getRegistrarPersonLastName() !\u003d null)": [
+    "personnelOrgIdRegistrarLastName \u003d personnelService.getPersonnel(PersonnelDTO.builder().personnelLastName(filterDTO.getRegistrarPersonLastName()).type(typeOfBasePersonnelDTOSending).build()).getPersonnelDTOList().stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());",
+    "if (personnelOrgIdRegistrarLastName.isEmpty())\r\n    return EncouragementAndPunishmentDTO.builder().punishmentList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e(), pageable, 0)).build();\r\nelse {\r\n    personnelOrgIdRegistrarLastName.retainAll(personnelOrgIdList);\r\n    filterDTO.setPunishmentRegistrarOrganizationIdList(personnelOrgIdRegistrarLastName);\r\n}"
+  ],
+  "getPunishmentListOfThisServiceUnit / if (personnelOrgIdPunishedLastName.isEmpty())": [
+    "return EncouragementAndPunishmentDTO.builder().punishmentList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e(), pageable, 0)).build();"
+  ],
+  "getPunishmentListOfThisServiceUnit / if (filterDTO.getPunishedPersonLastName() !\u003d null)": [
+    "personnelOrgIdPunishedLastName \u003d personnelService.getPersonnel(PersonnelDTO.builder().personnelLastName(filterDTO.getPunishedPersonLastName()).type(typeOfBasePersonnelDTOSending).build()).getPersonnelDTOList().stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());",
+    "if (personnelOrgIdPunishedLastName.isEmpty())\r\n    return EncouragementAndPunishmentDTO.builder().punishmentList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e(), pageable, 0)).build();\r\nelse {\r\n    personnelOrgIdPunishedLastName.retainAll(personnelOrgIdList);\r\n    filterDTO.setPunishmentPersonnelOrganizationIdList(personnelOrgIdPunishedLastName);\r\n}"
+  ],
+  "setSameUnitPersonnelOrganizationId / if (!hasThisKey)": [
+    "personnel \u003d personnelService.getPersonnel(PersonnelDTO.builder().personnelUnitCode(personnelUnitCode).type(typeOfBasePersonnelDTOSending).build()).getPersonnelDTOList().stream().map(BasePersonnelDTO::getPersonnelOrganizationID).toList();",
+    "personnelCacheList.add(Map.of(personnelUnitCode, personnel));"
+  ],
+  "setSameUnitPersonnelOrganizationId / else": [
+    "throw new ValidationException(\"لطفا دوباره لاگین کنید. \");"
+  ],
+  "setSameUnitPersonnelOrganizationId / if (personnelDto !\u003d null)": [
+    "String personnelUnitCode \u003d personnelDto.getPersonnelUnitCode();",
+    "boolean hasThisKey \u003d personnelCacheList.stream().anyMatch(map -\u003e map.containsKey(personnelUnitCode));",
+    "if (!hasThisKey) {\r\n    personnel \u003d personnelService.getPersonnel(PersonnelDTO.builder().personnelUnitCode(personnelUnitCode).type(typeOfBasePersonnelDTOSending).build()).getPersonnelDTOList().stream().map(BasePersonnelDTO::getPersonnelOrganizationID).toList();\r\n    personnelCacheList.add(Map.of(personnelUnitCode, personnel));\r\n} else\r\n    personnel \u003d personnelCacheList.stream().filter(map -\u003e map.containsKey(personnelUnitCode)).map(map2 -\u003e map2.get(personnelUnitCode)).findAny().orElse(null);",
+    "return personnel;"
+  ],
+  "setSameUnitPersonnelOrganizationId / if (auth !\u003d null \u0026\u0026 auth.getAuthorities().stream().anyMatch(a -\u003e a.getAuthority().equals(\"ROLE_\".concat(RoleConstant.ROLE.EXECUTIVE_MANAGER.name()))))": [
+    "PersonnelDTO personnelDto \u003d authService.getCurrentUserProfile().getUserInfo();",
+    "List\u003cString\u003e personnel;",
+    "if (personnelDto !\u003d null) {\r\n    String personnelUnitCode \u003d personnelDto.getPersonnelUnitCode();\r\n    boolean hasThisKey \u003d personnelCacheList.stream().anyMatch(map -\u003e map.containsKey(personnelUnitCode));\r\n    if (!hasThisKey) {\r\n        personnel \u003d personnelService.getPersonnel(PersonnelDTO.builder().personnelUnitCode(personnelUnitCode).type(typeOfBasePersonnelDTOSending).build()).getPersonnelDTOList().stream().map(BasePersonnelDTO::getPersonnelOrganizationID).toList();\r\n        personnelCacheList.add(Map.of(personnelUnitCode, personnel));\r\n    } else\r\n        personnel \u003d personnelCacheList.stream().filter(map -\u003e map.containsKey(personnelUnitCode)).map(map2 -\u003e map2.get(personnelUnitCode)).findAny().orElse(null);\r\n    return personnel;\r\n} else\r\n    throw new ValidationException(\"لطفا دوباره لاگین کنید. \");"
+  ],
+  "getEncouragementList / if (basePersonnelWithFirstName \u003d\u003d null || basePersonnelWithFirstName.size() \u003d\u003d 0)": [
+    "return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();"
+  ],
+  "getEncouragementList / else": [
+    "lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());",
+    "filterDTO.setEncouragementApproverOrganizationIdList(lastNamePersonnelOrgId);"
+  ],
+  "getEncouragementList / if (filterDTO.getEncouragedPersonFirstName() !\u003d null)": [
+    "basePersonnelWithFirstName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelFirstName(filterDTO.getEncouragedPersonFirstName()).type(typeOfBasePersonnelDTOSending).build());",
+    "if (basePersonnelWithFirstName \u003d\u003d null || basePersonnelWithFirstName.size() \u003d\u003d 0)\r\n    return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\nelse {\r\n    firstNamePersonnelOrgId \u003d basePersonnelWithFirstName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    filterDTO.setEncouragementPersonnelOrganizationIdList(firstNamePersonnelOrgId);\r\n}"
+  ],
+  "getEncouragementList / if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)": [
+    "return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();"
+  ],
+  "getEncouragementList / if (filterDTO.getEncouragedPersonLastName() !\u003d null)": [
+    "basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getEncouragedPersonLastName()).type(typeOfBasePersonnelDTOSending).build());",
+    "if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n    return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\nelse {\r\n    lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    filterDTO.setEncouragementPersonnelOrganizationIdList(lastNamePersonnelOrgId);\r\n}"
+  ],
+  "getEncouragementList / if (filterDTO.getRegistrarPersonLastName() !\u003d null)": [
+    "basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getRegistrarPersonLastName()).type(typeOfBasePersonnelDTOSending).build());",
+    "if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n    return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\nelse {\r\n    lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    filterDTO.setEncouragementRegistrarOrganizationIdList(lastNamePersonnelOrgId);\r\n}"
+  ],
+  "getEncouragementList / if (filterDTO.getApproverPersonLastName() !\u003d null)": [
+    "basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getApproverPersonLastName()).type(typeOfBasePersonnelDTOSending).build());",
+    "if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n    return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\nelse {\r\n    lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    filterDTO.setEncouragementApproverOrganizationIdList(lastNamePersonnelOrgId);\r\n}"
+  ],
+  "getEncouragementList / if (firstNamePersonnelOrgId.size() \u003e 0 \u0026\u0026 lastNamePersonnelOrgId.size() \u003e 0)": [
+    "firstNamePersonnelOrgId.retainAll(lastNamePersonnelOrgId);"
+  ],
+  "getEncouragementList / if (basePersonnelWithFirstName !\u003d null \u0026\u0026 basePersonnelWithFirstName.size() \u003e 0 \u0026\u0026 basePersonnelWithLastName !\u003d null)": [
+    "if (firstNamePersonnelOrgId.size() \u003e 0 \u0026\u0026 lastNamePersonnelOrgId.size() \u003e 0)\r\n    firstNamePersonnelOrgId.retainAll(lastNamePersonnelOrgId);",
+    "filterDTO.setEncouragementPersonnelOrganizationIdList(firstNamePersonnelOrgId);"
+  ],
+  "getEncouragementList / if (sameUnitPersonnelOrganizationId !\u003d null \u0026\u0026 !sameUnitPersonnelOrganizationId.isEmpty())": [
+    "filterDTO.setEncouragementPersonnelOrganizationIdList(sameUnitPersonnelOrganizationId);"
+  ],
+  "getEncouragementList / if (filterDTO.getAllServiceUnitPersonnelEncouragement())": [
+    "List\u003cString\u003e sameUnitPersonnelOrganizationId \u003d setSameUnitPersonnelOrganizationId();",
+    "if (sameUnitPersonnelOrganizationId !\u003d null \u0026\u0026 !sameUnitPersonnelOrganizationId.isEmpty())\r\n    filterDTO.setEncouragementPersonnelOrganizationIdList(sameUnitPersonnelOrganizationId);"
+  ],
+  "getEncouragementList / if (filterDTO.getWithPunishment())": [
+    "punishmentDTOList \u003d setPunishment(PunishmentFilterDTOV2.builder().punishmentPersonnelOrganizationId(filterDTO.getEncouragementPersonnelOrganizationId()).punishmentRegistrarOrganizationId(filterDTO.getEncouragementRegistrarOrganizationId()).punishmentRegistrarOrPunishedOrganizationId(filterDTO.getEncouragementRegistrarOrEncouragedOrganizationId()).punishmentStatusNot(EncouragementResultEnum.DRAFT.getCode()).build(), pageable.getPageSize(), pageable.getPageNumber());"
+  ],
+  "getEncouragementList / if (filterDTO.getEncouragementPersonnelOrganizationId() !\u003d null)": [
+    "encouragementRepository.changeHasUserSeenEncouragementTrue(encouragementPage.toList());"
+  ],
+  "getEncouragementList / if (filterDTO !\u003d null)": [
+    "List\u003c? extends BasePersonnelDTO\u003e basePersonnelWithFirstName \u003d null;",
+    "List\u003c? extends BasePersonnelDTO\u003e basePersonnelWithLastName \u003d null;",
+    "List\u003cString\u003e firstNamePersonnelOrgId \u003d null;",
+    "List\u003cString\u003e lastNamePersonnelOrgId \u003d null;",
+    "if (filterDTO.getEncouragedPersonFirstName() !\u003d null) {\r\n    basePersonnelWithFirstName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelFirstName(filterDTO.getEncouragedPersonFirstName()).type(typeOfBasePersonnelDTOSending).build());\r\n    if (basePersonnelWithFirstName \u003d\u003d null || basePersonnelWithFirstName.size() \u003d\u003d 0)\r\n        return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\n    else {\r\n        firstNamePersonnelOrgId \u003d basePersonnelWithFirstName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n        filterDTO.setEncouragementPersonnelOrganizationIdList(firstNamePersonnelOrgId);\r\n    }\r\n}",
+    "if (filterDTO.getEncouragedPersonLastName() !\u003d null) {\r\n    basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getEncouragedPersonLastName()).type(typeOfBasePersonnelDTOSending).build());\r\n    if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n        return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\n    else {\r\n        lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n        filterDTO.setEncouragementPersonnelOrganizationIdList(lastNamePersonnelOrgId);\r\n    }\r\n}",
+    "if (filterDTO.getRegistrarPersonLastName() !\u003d null) {\r\n    basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getRegistrarPersonLastName()).type(typeOfBasePersonnelDTOSending).build());\r\n    if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n        return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\n    else {\r\n        lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n        filterDTO.setEncouragementRegistrarOrganizationIdList(lastNamePersonnelOrgId);\r\n    }\r\n}",
+    "if (filterDTO.getApproverPersonLastName() !\u003d null) {\r\n    basePersonnelWithLastName \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(filterDTO.getApproverPersonLastName()).type(typeOfBasePersonnelDTOSending).build());\r\n    if (basePersonnelWithLastName \u003d\u003d null || basePersonnelWithLastName.size() \u003d\u003d 0)\r\n        return EncouragementAndPunishmentDTO.builder().encouragementList(new PageImpl\u003c\u003e(new ArrayList\u003c\u003e())).build();\r\n    else {\r\n        lastNamePersonnelOrgId \u003d basePersonnelWithLastName.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n        filterDTO.setEncouragementApproverOrganizationIdList(lastNamePersonnelOrgId);\r\n    }\r\n}",
+    "if (basePersonnelWithFirstName !\u003d null \u0026\u0026 basePersonnelWithFirstName.size() \u003e 0 \u0026\u0026 basePersonnelWithLastName !\u003d null) {\r\n    if (firstNamePersonnelOrgId.size() \u003e 0 \u0026\u0026 lastNamePersonnelOrgId.size() \u003e 0)\r\n        firstNamePersonnelOrgId.retainAll(lastNamePersonnelOrgId);\r\n    filterDTO.setEncouragementPersonnelOrganizationIdList(firstNamePersonnelOrgId);\r\n}",
+    "if (filterDTO.getAllServiceUnitPersonnelEncouragement()) {\r\n    List\u003cString\u003e sameUnitPersonnelOrganizationId \u003d setSameUnitPersonnelOrganizationId();\r\n    if (sameUnitPersonnelOrganizationId !\u003d null \u0026\u0026 !sameUnitPersonnelOrganizationId.isEmpty())\r\n        filterDTO.setEncouragementPersonnelOrganizationIdList(sameUnitPersonnelOrganizationId);\r\n}",
+    "List\u003cPunishmentDTO\u003e punishmentDTOList \u003d null;",
+    "if (filterDTO.getWithPunishment())\r\n    punishmentDTOList \u003d setPunishment(PunishmentFilterDTOV2.builder().punishmentPersonnelOrganizationId(filterDTO.getEncouragementPersonnelOrganizationId()).punishmentRegistrarOrganizationId(filterDTO.getEncouragementRegistrarOrganizationId()).punishmentRegistrarOrPunishedOrganizationId(filterDTO.getEncouragementRegistrarOrEncouragedOrganizationId()).punishmentStatusNot(EncouragementResultEnum.DRAFT.getCode()).build(), pageable.getPageSize(), pageable.getPageNumber());",
+    "Page\u003cEncouragement\u003e encouragementPage \u003d encouragementRepository.findAll(EncouragementSpecifications.filterBySpecification(filterDTO), pageable);",
+    "if (filterDTO.getEncouragementPersonnelOrganizationId() !\u003d null)\r\n    encouragementRepository.changeHasUserSeenEncouragementTrue(encouragementPage.toList());",
+    "return setPageDTOFromEncouragementPage(filterDTO, pageable, encouragementPage, punishmentDTOList);"
+  ],
+  "setPageDTOFromEncouragementPage / if (filterDTO.getEncouragementReason() !\u003d null)": [
+    "encouragementList \u003d encouragementList.stream().filter(item -\u003e item.getEncouragementReason().contains(filterDTO.getEncouragementReason())).collect(Collectors.toList());"
+  ],
+  "setPageDTOFromEncouragementPage / if (filterDTO.getEncouragementType() !\u003d null)": [
+    "encouragementList \u003d encouragementList.stream().filter(item -\u003e item.getEncouragementType().contains(filterDTO.getEncouragementType())).collect(Collectors.toList());"
+  ],
+  "setEncouragementDtoList / if (encouragedPerson !\u003d null)": [
+    "encouragementDTO.setEncouragedPersonFirstName(encouragedPerson.getPersonnelFirstName());",
+    "encouragementDTO.setEncouragedPersonLastName(encouragedPerson.getPersonnelLastName());",
+    "encouragementDTO.setEncouragementPersonnelOrganizationId(encouragedPerson.getPersonnelOrganizationID());",
+    "encouragementDTO.setEncouragedPersonUnitCode(encouragedPerson.getPersonnelUnitCode());",
+    "encouragementDTO.setEncouragedPersonRankTypePersianName(encouragedPerson.getPersonnelRankTypePersianName());",
+    "encouragementDTO.setEncouragedPersonRankTypeCivilianCode(encouragedPerson.getPersonnelRankTypeCivilianCode());"
+  ],
+  "setEncouragementDtoList / if (registrarPerson !\u003d null)": [
+    "encouragementDTO.setRegistrarPersonFirstName(registrarPerson.getPersonnelFirstName());",
+    "encouragementDTO.setRegistrarPersonLastName(registrarPerson.getPersonnelLastName());"
+  ],
+  "setEncouragementDtoList / if (approverPerson !\u003d null)": [
+    "encouragementDTO.setApproverPersonFirstName(approverPerson.getPersonnelFirstName());",
+    "encouragementDTO.setApproverPersonLastName(approverPerson.getPersonnelLastName());"
+  ],
+  "setEncouragementDtoList / if (reasonDTO !\u003d null)": [
+    "encouragementDTO.setEncouragementReason(reasonDTO.getEncouragementReasonTitle());",
+    "encouragementDTO.setEncouragementReasonId(reasonDTO.getEncouragementReasonId());"
+  ],
+  "setEncouragementDtoList / if (typeDTO !\u003d null)": [
+    "encouragementDTO.setEncouragementType(typeDTO.getEncouragementTypeTitle());",
+    "encouragementDTO.setEncouragementTypeId(typeDTO.getEncouragementTypeId());"
+  ],
+  "setEncouragementDtoList / if (withFile)": [
+    "FileAttachmentDTO fileAttachmentDTO \u003d FileAttachmentDTO.builder().encouragementId(encouragement.getEncouragementId()).build();",
+    "List\u003cAttachment\u003e attachmentGetDTOList \u003d attachmentService.getAllEncouragementAttachments(PageRequest.of(0, 9000), fileAttachmentDTO, false);",
+    "encouragementDTO.setAttachmentList(attachmentGetDTOList);"
+  ],
+  "addOrUpdateEncouragement / if (request.getReasonId() !\u003d null \u0026\u0026 request.getType() !\u003d null \u0026\u0026 request.getType().getTypeId() !\u003d null)": [
+    "reasonType \u003d this.findReasonType(request.getReasonId(), request.getType().getTypeId());"
+  ],
+  "addOrUpdateEncouragement / if (!encouragedPerson.getPersonnelMembershipCode().equals(MembershipType.PERMANENT.getCode()))": [
+    "throw new ValidationException(\"شخص انتخاب شده، رسمی نمی باشد.\");"
+  ],
+  "addOrUpdateEncouragement / if (encouragement.getEncouragementStatus() \u003d\u003d null || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))": [
+    "encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());"
+  ],
+  "addOrUpdateEncouragement / if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))": [
+    "encouragement.setEncouragementSentDraftDate(LocalDate.now());"
+  ],
+  "addOrUpdateEncouragement / if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))": [
+    "encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());"
+  ],
+  "addOrUpdateEncouragement / else": [
+    "throw new GeneralException(\"پارامتر ورودی صحیح نمی باشد .\");"
+  ],
+  "addOrUpdateEncouragement / if (encouragement.getEncouragementStatus() !\u003d null \u0026\u0026 !encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()))": [
+    "if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n    encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());\r\nelse {\r\n    if (encouragement.getEncouragementStatus() \u003d\u003d null || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))\r\n        encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());\r\n    if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n        encouragement.setEncouragementSentDraftDate(LocalDate.now());\r\n}"
+  ],
+  "addOrUpdateEncouragement / if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 encouragedPerson.getPersonnelManager().getPersonnelManagerOrganizationIdList().stream().anyMatch(managerOrganizationId -\u003e managerOrganizationId.equals(registrar.getPersonnelOrganizationID())))": [
+    "Encouragement encouragement \u003d createOrUpdateEncouragement(request, reasonType, registrar.getPersonnelOrganizationID(), personnelOrganizationId);",
+    "encouragement.setEncouragementTypeCategory(TypeCategoryEnum.NORMAL);",
+    "if (encouragement.getEncouragementStatus() !\u003d null \u0026\u0026 !encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n    if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n        encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());\r\n    else {\r\n        if (encouragement.getEncouragementStatus() \u003d\u003d null || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))\r\n            encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());\r\n        if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n            encouragement.setEncouragementSentDraftDate(LocalDate.now());\r\n    }\r\n}",
+    "encouragements.add(encouragement);"
+  ],
+  "addOrUpdateEncouragement / if ((registrar.getPersonnelUnitCode() \u003d\u003d null || encouragedPerson.getPersonnelUnitCode() \u003d\u003d null) || Objects.equals(registrar.getPersonnelUnitCode(), encouragedPerson.getPersonnelUnitCode()))": [
+    "/**\r\n * @CheckExistsRegistrarInPersonnelManager\r\n */\r\nif (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 encouragedPerson.getPersonnelManager().getPersonnelManagerOrganizationIdList().stream().anyMatch(managerOrganizationId -\u003e managerOrganizationId.equals(registrar.getPersonnelOrganizationID()))) {\r\n    Encouragement encouragement \u003d createOrUpdateEncouragement(request, reasonType, registrar.getPersonnelOrganizationID(), personnelOrganizationId);\r\n    encouragement.setEncouragementTypeCategory(TypeCategoryEnum.NORMAL);\r\n    if (encouragement.getEncouragementStatus() !\u003d null \u0026\u0026 !encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n        if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n            encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());\r\n        else {\r\n            if (encouragement.getEncouragementStatus() \u003d\u003d null || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))\r\n                encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());\r\n            if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n                encouragement.setEncouragementSentDraftDate(LocalDate.now());\r\n        }\r\n    }\r\n    encouragements.add(encouragement);\r\n} else\r\n    throw new GeneralException(String.format(\"شما در سلسله مراتب پرسنل %s قرار ندارید.\", encouragedPerson.getPersonnelOrganizationID()));"
+  ],
+  "addOrUpdateEncouragement / if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode()))": [
+    "EncouragementReview encouragementReview \u003d list.get(0);",
+    "encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());",
+    "encouragementReviewService.changeEncouragementReviewStatus(encouragementReview, ReviewResultEnum.APPROVED.getCode());"
+  ],
+  "addOrUpdateEncouragement / if (list.isEmpty())": [
+    "this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.FALSE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);"
+  ],
+  "addOrUpdateEncouragement / if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()))": [
+    "encouragement.setEncouragementStatus(ReviewResultEnum.UNDER_REVIEW.getCode());"
+  ],
+  "addOrUpdateEncouragement / if (!encouragement.getIsEncouragementSeen())": [
+    "List\u003cEncouragementReview\u003e list \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(encouragement.getEncouragementRegistrarOrganizationId(), encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "if (list.isEmpty()) {\r\n    this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.FALSE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n} else {\r\n    this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.TRUE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n    if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode())) {\r\n        EncouragementReview encouragementReview \u003d list.get(0);\r\n        encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());\r\n        encouragementReviewService.changeEncouragementReviewStatus(encouragementReview, ReviewResultEnum.APPROVED.getCode());\r\n    }\r\n}",
+    "if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n    encouragement.setEncouragementStatus(ReviewResultEnum.UNDER_REVIEW.getCode());\r\n}",
+    "encouragementReviewService.updateSentForRegistrarEncouragementReviewHasBeenSeen(encouragement);"
+  ],
+  "addOrUpdateEncouragement / if (request.getEncouragementDraft() !\u003d null \u0026\u0026 request.getEncouragementDraft().equals(DraftEnum.Sent.getCode()))": [
+    "if (!encouragement.getIsEncouragementSeen()) {\r\n    List\u003cEncouragementReview\u003e list \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(encouragement.getEncouragementRegistrarOrganizationId(), encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    if (list.isEmpty()) {\r\n        this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.FALSE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n    } else {\r\n        this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.TRUE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n        if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode())) {\r\n            EncouragementReview encouragementReview \u003d list.get(0);\r\n            encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());\r\n            encouragementReviewService.changeEncouragementReviewStatus(encouragementReview, ReviewResultEnum.APPROVED.getCode());\r\n        }\r\n    }\r\n    if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n        encouragement.setEncouragementStatus(ReviewResultEnum.UNDER_REVIEW.getCode());\r\n    }\r\n    encouragementReviewService.updateSentForRegistrarEncouragementReviewHasBeenSeen(encouragement);\r\n} else\r\n    throw new GeneralException(\"این تشویق مشاهده شده و قابل ویرایش نیست\");"
+  ],
+  "addOrUpdateEncouragement / if (!resultList.isEmpty() \u0026\u0026 request.getEncouragementDraft().equals(DraftEnum.Sent.getCode()))": [
+    "resultList.forEach(encouragement -\u003e {\r\n    try {\r\n        if (request.getEncouragementDraft() !\u003d null \u0026\u0026 request.getEncouragementDraft().equals(DraftEnum.Sent.getCode())) {\r\n            if (!encouragement.getIsEncouragementSeen()) {\r\n                List\u003cEncouragementReview\u003e list \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(encouragement.getEncouragementRegistrarOrganizationId(), encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                if (list.isEmpty()) {\r\n                    this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.FALSE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n                } else {\r\n                    this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.TRUE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n                    if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode())) {\r\n                        EncouragementReview encouragementReview \u003d list.get(0);\r\n                        encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());\r\n                        encouragementReviewService.changeEncouragementReviewStatus(encouragementReview, ReviewResultEnum.APPROVED.getCode());\r\n                    }\r\n                }\r\n                if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n                    encouragement.setEncouragementStatus(ReviewResultEnum.UNDER_REVIEW.getCode());\r\n                }\r\n                encouragementReviewService.updateSentForRegistrarEncouragementReviewHasBeenSeen(encouragement);\r\n            } else\r\n                throw new GeneralException(\"این تشویق مشاهده شده و قابل ویرایش نیست\");\r\n        }\r\n    } catch (Exception e) {\r\n        throw new RuntimeException(e);\r\n    }\r\n});"
+  ],
+  "addOrUpdateEncouragement / if (request !\u003d null \u0026\u0026 request.getEncouragementRelatedPersonnelOrganizationIds() !\u003d null)": [
+    "List\u003cEncouragement\u003e encouragements \u003d new ArrayList\u003c\u003e();",
+    "EncouragementReasonType reasonType \u003d null;",
+    "if (request.getReasonId() !\u003d null \u0026\u0026 request.getType() !\u003d null \u0026\u0026 request.getType().getTypeId() !\u003d null)\r\n    reasonType \u003d this.findReasonType(request.getReasonId(), request.getType().getTypeId());",
+    "validate(request.getAmount(), reasonType);",
+    "for (String personnelOrganizationId : request.getEncouragementRelatedPersonnelOrganizationIds()) {\r\n    PersonnelDTO encouragedPerson \u003d (PersonnelDTO) personnelService.findByOrganizationId(personnelOrganizationId, typeOfPersonnelDTOWithManagerSending);\r\n    if (!encouragedPerson.getPersonnelMembershipCode().equals(MembershipType.PERMANENT.getCode()))\r\n        throw new ValidationException(\"شخص انتخاب شده، رسمی نمی باشد.\");\r\n    /**\r\n     * @CheckBothAreExistsInSameOrganization\r\n     */\r\n    if ((registrar.getPersonnelUnitCode() \u003d\u003d null || encouragedPerson.getPersonnelUnitCode() \u003d\u003d null) || Objects.equals(registrar.getPersonnelUnitCode(), encouragedPerson.getPersonnelUnitCode())) {\r\n        /**\r\n         * @CheckExistsRegistrarInPersonnelManager\r\n         */\r\n        if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 encouragedPerson.getPersonnelManager().getPersonnelManagerOrganizationIdList().stream().anyMatch(managerOrganizationId -\u003e managerOrganizationId.equals(registrar.getPersonnelOrganizationID()))) {\r\n            Encouragement encouragement \u003d createOrUpdateEncouragement(request, reasonType, registrar.getPersonnelOrganizationID(), personnelOrganizationId);\r\n            encouragement.setEncouragementTypeCategory(TypeCategoryEnum.NORMAL);\r\n            if (encouragement.getEncouragementStatus() !\u003d null \u0026\u0026 !encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n                if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n                    encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());\r\n                else {\r\n                    if (encouragement.getEncouragementStatus() \u003d\u003d null || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))\r\n                        encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());\r\n                    if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n                        encouragement.setEncouragementSentDraftDate(LocalDate.now());\r\n                }\r\n            }\r\n            encouragements.add(encouragement);\r\n        } else\r\n            throw new GeneralException(String.format(\"شما در سلسله مراتب پرسنل %s قرار ندارید.\", encouragedPerson.getPersonnelOrganizationID()));\r\n    } else\r\n        throw new GeneralException(String.format(\"تشویق شونده ی %s در یگان شما نمی باشد.\", encouragedPerson.getPersonnelOrganizationID()));\r\n}",
+    "List\u003cEncouragement\u003e resultList \u003d encouragementRepository.saveAll(encouragements);",
+    "if (!resultList.isEmpty() \u0026\u0026 request.getEncouragementDraft().equals(DraftEnum.Sent.getCode())) {\r\n    resultList.forEach(encouragement -\u003e {\r\n        try {\r\n            if (request.getEncouragementDraft() !\u003d null \u0026\u0026 request.getEncouragementDraft().equals(DraftEnum.Sent.getCode())) {\r\n                if (!encouragement.getIsEncouragementSeen()) {\r\n                    List\u003cEncouragementReview\u003e list \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(encouragement.getEncouragementRegistrarOrganizationId(), encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                    if (list.isEmpty()) {\r\n                        this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.FALSE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n                    } else {\r\n                        this.calculator(encouragement, request.getType().getTypeId(), registrar, Boolean.TRUE, request.getEncouragementDraft(), true, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n                        if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode())) {\r\n                            EncouragementReview encouragementReview \u003d list.get(0);\r\n                            encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());\r\n                            encouragementReviewService.changeEncouragementReviewStatus(encouragementReview, ReviewResultEnum.APPROVED.getCode());\r\n                        }\r\n                    }\r\n                    if (encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode())) {\r\n                        encouragement.setEncouragementStatus(ReviewResultEnum.UNDER_REVIEW.getCode());\r\n                    }\r\n                    encouragementReviewService.updateSentForRegistrarEncouragementReviewHasBeenSeen(encouragement);\r\n                } else\r\n                    throw new GeneralException(\"این تشویق مشاهده شده و قابل ویرایش نیست\");\r\n            }\r\n        } catch (Exception e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    });\r\n}",
+    "return resultList;"
+  ],
+  "addOrUpdateEncouragementByEncouragementSpecialist / if (dto.getReasonId() !\u003d null \u0026\u0026 dto.getType() !\u003d null \u0026\u0026 dto.getType().getTypeId() !\u003d null)": [
+    "reasonType \u003d this.findReasonType(dto.getReasonId(), dto.getType().getTypeId());"
+  ],
+  "addOrUpdateEncouragementByEncouragementSpecialist / if (dto.getEncouragementDraft().equals(DraftEnum.Sent.getCode()))": [
+    "this.calculator(encouragement, finalReasonType.getEncouragementTypeId(), registrar, Boolean.FALSE, dto.getEncouragementDraft(), false, false, true, null, currentUserRole);"
+  ],
+  "addOrUpdateEncouragementByEncouragementSpecialist / if (encouragement.getEncouragementId() !\u003d null)": [
+    "FileAttachmentDTO fileAttachmentDTO \u003d FileAttachmentDTO.builder().encouragementId(encouragement.getEncouragementId()).build();",
+    "try {\r\n    addFile(fileList, finalDeleteFileIdList, fileAttachmentDTO);\r\n    if (dto.getEncouragementDraft().equals(DraftEnum.Sent.getCode()))\r\n        this.calculator(encouragement, finalReasonType.getEncouragementTypeId(), registrar, Boolean.FALSE, dto.getEncouragementDraft(), false, false, true, null, currentUserRole);\r\n} catch (Exception e) {\r\n    throw new RuntimeException(e);\r\n}"
+  ],
+  "createOrUpdateEncouragement / if (request.getEncouragementId() !\u003d null)": [
+    "encouragementId \u003d request.getEncouragementId();"
+  ],
+  "createOrUpdateEncouragement / if (encouragement.getIsEncouragementSeen() \u0026\u0026 !encouragement.getEncouragementStatus().equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode()))": [
+    "throw new ValidationException(\"این تشویق مشاهده شده است و قابل ویرایش نمی باشد.\");"
+  ],
+  "createOrUpdateEncouragement / if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()) \u0026\u0026 encouragementReasonType.isPresent() \u0026\u0026 !encouragementReasonType.get().isActive())": [
+    "throw new GeneralException(\"ارتباط نوع و علت غیر فعال شده است.\");"
+  ],
+  "createOrUpdateEncouragement / if (encouragement !\u003d null)": [
+    "if (encouragement.getIsEncouragementSeen() \u0026\u0026 !encouragement.getEncouragementStatus().equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode()))\r\n    throw new ValidationException(\"این تشویق مشاهده شده است و قابل ویرایش نمی باشد.\");",
+    "Optional\u003cEncouragementReasonType\u003e encouragementReasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(encouragement.getEncouragementReasonTypeId());",
+    "if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()) \u0026\u0026 encouragementReasonType.isPresent() \u0026\u0026 !encouragementReasonType.get().isActive())\r\n    throw new GeneralException(\"ارتباط نوع و علت غیر فعال شده است.\");",
+    "//                                if (!encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()))\r\n//                                    throw new ValidationException(\"این تشویق ارسال شده است و قابل ویرایش نمی باشد.\");\r\nencouragement.setEncouragementId(request.getEncouragementId());"
+  ],
+  "createOrUpdateEncouragement / if (encouragementId !\u003d null)": [
+    "encouragement \u003d encouragementRepository.findById(encouragementId).orElse(null);",
+    "if (encouragement !\u003d null) {\r\n    if (encouragement.getIsEncouragementSeen() \u0026\u0026 !encouragement.getEncouragementStatus().equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode()))\r\n        throw new ValidationException(\"این تشویق مشاهده شده است و قابل ویرایش نمی باشد.\");\r\n    Optional\u003cEncouragementReasonType\u003e encouragementReasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(encouragement.getEncouragementReasonTypeId());\r\n    if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()) \u0026\u0026 encouragementReasonType.isPresent() \u0026\u0026 !encouragementReasonType.get().isActive())\r\n        throw new GeneralException(\"ارتباط نوع و علت غیر فعال شده است.\");\r\n    //                                if (!encouragement.getEncouragementStatus().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()))\r\n    //                                    throw new ValidationException(\"این تشویق ارسال شده است و قابل ویرایش نمی باشد.\");\r\n    encouragement.setEncouragementId(request.getEncouragementId());\r\n}"
+  ],
+  "createOrUpdateEncouragement / if (reasonType !\u003d null \u0026\u0026 !reasonType.isActive())": [
+    "throw new GeneralException(\"ارتباط نوع و علت غیر فعال است.\");"
+  ],
+  "createOrUpdateEncouragement / if (lastNumber.isPresent())": [
+    "encouragement.setEncouragementNumber(String.valueOf(lastNumber.get() + 1));"
+  ],
+  "createOrUpdateEncouragement / else": [
+    "encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());",
+    "if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n    encouragement.setEncouragementSentDraftDate(LocalDate.now());"
+  ],
+  "createOrUpdateEncouragement / if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))": [
+    "encouragement.setEncouragementSentDraftDate(LocalDate.now());"
+  ],
+  "createOrUpdateEncouragement / if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))": [
+    "encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());"
+  ],
+  "createOrUpdateEncouragement / if (encouragement \u003d\u003d null)": [
+    "if (reasonType !\u003d null \u0026\u0026 !reasonType.isActive())\r\n    throw new GeneralException(\"ارتباط نوع و علت غیر فعال است.\");",
+    "encouragement \u003d new Encouragement();",
+    "Optional\u003cLong\u003e lastNumber \u003d encouragementRepository.findMaxEncouragementNumber();",
+    "if (lastNumber.isPresent())\r\n    encouragement.setEncouragementNumber(String.valueOf(lastNumber.get() + 1));\r\nelse {\r\n    encouragement.setEncouragementNumber(String.valueOf(100000));\r\n}",
+    "if (!DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n    encouragement.setEncouragementStatus(EncouragementResultEnum.DRAFT.getCode());\r\nelse {\r\n    encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());\r\n    if (DraftEnum.fromCode(request.getEncouragementDraft()).equals(DraftEnum.Sent))\r\n        encouragement.setEncouragementSentDraftDate(LocalDate.now());\r\n}"
+  ],
+  "createOrUpdateEncouragement / if (request.getAmountType() !\u003d null)": [
+    "encouragement.setEncouragementAmountType(request.getAmountType());"
+  ],
+  "createOrUpdateEncouragement / if (registrarPersonnelOrganizationID !\u003d null)": [
+    "encouragement.setEncouragementRegistrarOrganizationId(registrarPersonnelOrganizationID);"
+  ],
+  "createOrUpdateEncouragement / if (encouragedPersonnelOrganizationId !\u003d null)": [
+    "encouragement.setEncouragementPersonnelOrganizationId(encouragedPersonnelOrganizationId);"
+  ],
+  "createOrUpdateEncouragement / if (request.getEncouragementDraft() !\u003d null)": [
+    "encouragement.setEncouragementDraft(DraftEnum.fromCode(request.getEncouragementDraft()));"
+  ],
+  "createOrUpdateEncouragement / if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementReasonTypeId() !\u003d null)": [
+    "encouragement.setEncouragementReasonTypeId(reasonType.getEncouragementReasonTypeId());"
+  ],
+  "validate / if (amount \u003e reasonType.getMaxDuration())": [
+    "throw new GeneralException(\" تشویق بالاتر از حداکثر  مجاز تعیین شده می باشد . \");"
+  ],
+  "validate / if (reasonType !\u003d null \u0026\u0026 reasonType.getMaxDuration() !\u003d null \u0026\u0026 !reasonType.getMaxDuration().equals(0) \u0026\u0026 amount !\u003d null)": [
+    "if (amount \u003e reasonType.getMaxDuration())\r\n    throw new GeneralException(\" تشویق بالاتر از حداکثر  مجاز تعیین شده می باشد . \");"
+  ],
+  "validate / if ((reasonType.getMaxAmount().compareTo(BigDecimal.valueOf(amount)) \u003c 0))": [
+    "throw new GeneralException(\" تشویق بالاتر از حداکثر  مجاز تعیین شده می باشد . \");"
+  ],
+  "validate / if (reasonType !\u003d null \u0026\u0026 reasonType.getMaxAmount() !\u003d null \u0026\u0026 !reasonType.getMaxAmount().equals(BigDecimal.ZERO) \u0026\u0026 amount !\u003d null)": [
+    "if ((reasonType.getMaxAmount().compareTo(BigDecimal.valueOf(amount)) \u003c 0)) {\r\n    throw new GeneralException(\" تشویق بالاتر از حداکثر  مجاز تعیین شده می باشد . \");\r\n}"
+  ],
+  "validate / else": [
+    "if (reasonType !\u003d null \u0026\u0026 reasonType.getMaxDuration() !\u003d null \u0026\u0026 !reasonType.getMaxDuration().equals(0) \u0026\u0026 amount !\u003d null) {\r\n    if (amount \u003e reasonType.getMaxDuration())\r\n        throw new GeneralException(\" تشویق بالاتر از حداکثر  مجاز تعیین شده می باشد . \");\r\n}"
+  ],
+  "calculator / if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0))": [
+    "amountOfEncouragementIsWithinThePowerLimits \u003d true;"
+  ],
+  "calculator / if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null))": [
+    "amountOfEncouragementIsWithinThePowerLimits \u003d true;"
+  ],
+  "calculator / else": [
+    "throw new GeneralException(\"پارامتر ورودی صحیح نمی باشد .\");"
+  ],
+  "calculator / if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode()))": [
+    "this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);"
+  ],
+  "calculator / if (amountOfEncouragementIsWithinThePowerLimits)": [
+    "this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);"
+  ],
+  "calculator / if (optional.isPresent())": [
+    "boolean amountOfEncouragementIsWithinThePowerLimits \u003d false;",
+    "RegistrarPowerLimits powerLimits \u003d optional.get();",
+    "if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null)) {\r\n    amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n} else {\r\n    if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0)) {\r\n        amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n    }\r\n}",
+    "if (amountOfEncouragementIsWithinThePowerLimits) {\r\n    this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n} else {\r\n    if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode())) {\r\n        this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n        afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n        //                                        forwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);\r\n    } else\r\n        throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");\r\n}"
+  ],
+  "calculator / if (isGreaterThanSecondLieutenant)": [
+    "sendForVedjaCommission(encouragement, personnelReviewCreator);"
+  ],
+  "calculator / if (currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue()))": [
+    "Integer encouragedPersonRank \u003d encouragedPerson.getPersonnelRankTypeCode();",
+    "boolean isGreaterThanSecondLieutenant \u003d encouragedPersonRank \u003e\u003d RankTypeEnum.SECOND_LIEUTENANT.getRankCode();",
+    "if (isGreaterThanSecondLieutenant) {\r\n    sendForVedjaCommission(encouragement, personnelReviewCreator);\r\n} else\r\n    this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());"
+  ],
+  "calculator / if (checkingRegistrarPowerLimits)": [
+    "if (currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue())) {\r\n    Integer encouragedPersonRank \u003d encouragedPerson.getPersonnelRankTypeCode();\r\n    boolean isGreaterThanSecondLieutenant \u003d encouragedPersonRank \u003e\u003d RankTypeEnum.SECOND_LIEUTENANT.getRankCode();\r\n    if (isGreaterThanSecondLieutenant) {\r\n        sendForVedjaCommission(encouragement, personnelReviewCreator);\r\n    } else\r\n        this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n} else {\r\n    Optional\u003cRegistrarPowerLimits\u003e optional \u003d registrarPowerLimitsService.getThisPersonnelOrganizationIdGroupAndEncouragementTypeId(registrarPowerLimitOrganizationId, typeId);\r\n    if (optional.isPresent()) {\r\n        boolean amountOfEncouragementIsWithinThePowerLimits \u003d false;\r\n        RegistrarPowerLimits powerLimits \u003d optional.get();\r\n        if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null)) {\r\n            amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n        } else {\r\n            if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0)) {\r\n                amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n            }\r\n        }\r\n        if (amountOfEncouragementIsWithinThePowerLimits) {\r\n            this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n            afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n        } else {\r\n            if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode())) {\r\n                this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                //                                        forwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);\r\n            } else\r\n                throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");\r\n        }\r\n    } else {\r\n        afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n    }\r\n}"
+  ],
+  "calculator / if (personnelReviewCreator !\u003d null)": [
+    "if (checkingRegistrarPowerLimits) {\r\n    if (currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue())) {\r\n        Integer encouragedPersonRank \u003d encouragedPerson.getPersonnelRankTypeCode();\r\n        boolean isGreaterThanSecondLieutenant \u003d encouragedPersonRank \u003e\u003d RankTypeEnum.SECOND_LIEUTENANT.getRankCode();\r\n        if (isGreaterThanSecondLieutenant) {\r\n            sendForVedjaCommission(encouragement, personnelReviewCreator);\r\n        } else\r\n            this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    } else {\r\n        Optional\u003cRegistrarPowerLimits\u003e optional \u003d registrarPowerLimitsService.getThisPersonnelOrganizationIdGroupAndEncouragementTypeId(registrarPowerLimitOrganizationId, typeId);\r\n        if (optional.isPresent()) {\r\n            boolean amountOfEncouragementIsWithinThePowerLimits \u003d false;\r\n            RegistrarPowerLimits powerLimits \u003d optional.get();\r\n            if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null)) {\r\n                amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n            } else {\r\n                if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0)) {\r\n                    amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n                }\r\n            }\r\n            if (amountOfEncouragementIsWithinThePowerLimits) {\r\n                this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n            } else {\r\n                if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode())) {\r\n                    this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                    afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                    //                                        forwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);\r\n                } else\r\n                    throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");\r\n            }\r\n        } else {\r\n            afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n        }\r\n    }\r\n} else {\r\n    afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n}"
+  ],
+  "calculator / if (encouragedPerson !\u003d null)": [
+    "if (personnelReviewCreator !\u003d null) {\r\n    if (checkingRegistrarPowerLimits) {\r\n        if (currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue())) {\r\n            Integer encouragedPersonRank \u003d encouragedPerson.getPersonnelRankTypeCode();\r\n            boolean isGreaterThanSecondLieutenant \u003d encouragedPersonRank \u003e\u003d RankTypeEnum.SECOND_LIEUTENANT.getRankCode();\r\n            if (isGreaterThanSecondLieutenant) {\r\n                sendForVedjaCommission(encouragement, personnelReviewCreator);\r\n            } else\r\n                this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n        } else {\r\n            Optional\u003cRegistrarPowerLimits\u003e optional \u003d registrarPowerLimitsService.getThisPersonnelOrganizationIdGroupAndEncouragementTypeId(registrarPowerLimitOrganizationId, typeId);\r\n            if (optional.isPresent()) {\r\n                boolean amountOfEncouragementIsWithinThePowerLimits \u003d false;\r\n                RegistrarPowerLimits powerLimits \u003d optional.get();\r\n                if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null)) {\r\n                    amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n                } else {\r\n                    if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0)) {\r\n                        amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n                    }\r\n                }\r\n                if (amountOfEncouragementIsWithinThePowerLimits) {\r\n                    this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                    afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                } else {\r\n                    if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode())) {\r\n                        this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                        afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                        //                                        forwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);\r\n                    } else\r\n                        throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");\r\n                }\r\n            } else {\r\n                afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n            }\r\n        }\r\n    } else {\r\n        afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n    }\r\n} else\r\n    throw new GeneralException(\"شخص تشویق کننده یافت نشد .\");"
+  ],
+  "calculator / if (encouragement !\u003d null)": [
+    "PersonnelDTO encouragedPerson \u003d (PersonnelDTO) personnelService.findByOrganizationId(encouragement.getEncouragementPersonnelOrganizationId(), typeOfPersonnelDTOWithManagerSending);",
+    "if (encouragedPerson !\u003d null) {\r\n    if (personnelReviewCreator !\u003d null) {\r\n        if (checkingRegistrarPowerLimits) {\r\n            if (currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue())) {\r\n                Integer encouragedPersonRank \u003d encouragedPerson.getPersonnelRankTypeCode();\r\n                boolean isGreaterThanSecondLieutenant \u003d encouragedPersonRank \u003e\u003d RankTypeEnum.SECOND_LIEUTENANT.getRankCode();\r\n                if (isGreaterThanSecondLieutenant) {\r\n                    sendForVedjaCommission(encouragement, personnelReviewCreator);\r\n                } else\r\n                    this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n            } else {\r\n                Optional\u003cRegistrarPowerLimits\u003e optional \u003d registrarPowerLimitsService.getThisPersonnelOrganizationIdGroupAndEncouragementTypeId(registrarPowerLimitOrganizationId, typeId);\r\n                if (optional.isPresent()) {\r\n                    boolean amountOfEncouragementIsWithinThePowerLimits \u003d false;\r\n                    RegistrarPowerLimits powerLimits \u003d optional.get();\r\n                    if ((encouragement.getEncouragementAmount() \u003d\u003d null \u0026\u0026 powerLimits.getMaxAmount() \u003d\u003d null)) {\r\n                        amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n                    } else {\r\n                        if (encouragement.getEncouragementAmount() !\u003d null \u0026\u0026 (powerLimits.getMaxAmount().compareTo(BigDecimal.valueOf(encouragement.getEncouragementAmount())) \u003e\u003d 0 || powerLimits.getMaxDuration() !\u003d null \u0026\u0026 powerLimits.getMaxDuration().compareTo(Math.toIntExact(encouragement.getEncouragementAmount())) \u003e\u003d 0)) {\r\n                            amountOfEncouragementIsWithinThePowerLimits \u003d true;\r\n                        }\r\n                    }\r\n                    if (amountOfEncouragementIsWithinThePowerLimits) {\r\n                        this.changeEncouragementStatus(encouragement, EncouragementResultEnum.APPROVED.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                        afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                    } else {\r\n                        if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode())) {\r\n                            this.changeEncouragementStatus(encouragement, EncouragementResultEnum.NEED_FOR_ACCEPT.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n                            afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                            //                                        forwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);\r\n                        } else\r\n                            throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");\r\n                    }\r\n                } else {\r\n                    afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n                }\r\n            }\r\n        } else {\r\n            afterCheckingRegistrarPowerLimit(encouragement, personnelReviewCreator, isUpdateMode, draft, nextManager, deleteRecentManagerReview, encouragedPerson, currentUserRole);\r\n        }\r\n    } else\r\n        throw new GeneralException(\"شخص تشویق کننده یافت نشد .\");\r\n} else\r\n    throw new GeneralException(\"شخص تشویق شونده یافت نشد .\");"
+  ],
+  "afterCheckingRegistrarPowerLimit / if (!isUpdateMode)": [
+    "this.createReviewFromEncouragement(encouragement, personnelReviewCreator.getPersonnelOrganizationID(), ReviewResultEnum.APPROVED.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Sent.getCode(), null);"
+  ],
+  "afterCheckingRegistrarPowerLimit / if (encouragedPerson.getPersonnelManager() !\u003d null \u0026\u0026 draft.equals(DraftEnum.Sent.getCode()))": [
+    "//            List\u003cEncouragementReview\u003e list \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(personnelReviewCreator.getPersonnelOrganizationID(), encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n//            if (list.isEmpty())\r\n//                this.createReviewFromEncouragement(encouragement, personnelReviewCreator.getPersonnelOrganizationID(), ReviewResultEnum.APPROVED.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Sent.getCode(), null);\r\nforwardEncouragementForNextStep(encouragement, personnelReviewCreator, encouragedPerson, nextManager, deleteRecentManagerReview, currentUserRole);"
+  ],
+  "afterCheckingRegistrarPowerLimit / else": [
+    "throw new GeneralException(\"لیست مدیران شخص وارد شده خالی می باشد .\");"
+  ],
+  "forwardEncouragementForNextStep / if ((currentUserRole.equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue()) || creatorPositionInListOfManagersPosition.isEmpty()) \u0026\u0026 !encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()))": [
+    "commissionInput(encouragement, personnelManager.getPersonnelManagerOrganizationIdList().size() - 1 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(personnelManager.getPersonnelManagerOrganizationIdList().size() - 1) : null, personnelReviewCreator);",
+    "return;"
+  ],
+  "forwardEncouragementForNextStep / if (encouragementReviewList !\u003d null \u0026\u0026 encouragementReviewList.size() \u003e 0)": [
+    "thisEncouragementReview \u003d encouragementReviewList.get(0);"
+  ],
+  "forwardEncouragementForNextStep / if (nextManager)": [
+    "forwardNextManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, Optional.ofNullable(thisEncouragementReview), deleteRecentManagerReview, encouragedPerson);"
+  ],
+  "forwardEncouragementForNextStep / else": [
+    "forwardPreviousManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, Optional.ofNullable(thisEncouragementReview), deleteRecentManagerReview, encouragedPerson);"
+  ],
+  "commissionInput / if (commissionEncouragementReview.isEmpty())": [
+    "createReviewFromEncouragement(encouragement, null, ReviewResultEnum.UNDER_COMMISSION_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_COMMISSION.getCode(), DraftEnum.Nothing.getCode(), personnelManager);"
+  ],
+  "commissionInput / else": [
+    "updateExistEncouragement(commissionEncouragementReview.get(), encouragement);"
+  ],
+  "commissionInput / if (!encouragement.getEncouragementStatus().equals(EncouragementResultEnum.NEED_FOR_ACCEPT.getCode()))": [
+    "this.changeEncouragementStatus(encouragement, EncouragementResultEnum.UNDER_COMMISSION_REVIEW.getCode(), personnelReviewCreator.getPersonnelOrganizationID(), ReviewTypeEnum.ORDINARY_COMMISSION.getCode());"
+  ],
+  "forwardPreviousManager / if (creatorIndex + 1 \u003c\u003d personnelManager.getPersonnelManagerOrganizationIdList().size() - 1)": [
+    "nextManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex + 1);",
+    "nextEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(nextManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));"
+  ],
+  "forwardPreviousManager / if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId()))": [
+    "sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);"
+  ],
+  "forwardPreviousManager / if (review.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode()))": [
+    "if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId()))\r\n    changeEncouragementStatus(encouragement, EncouragementResultEnum.SENT_FOR_CORRECTION.getCode(), null, null);"
+  ],
+  "forwardPreviousManager / if (thisEncouragementReview.isPresent())": [
+    "EncouragementReview review \u003d thisEncouragementReview.get();",
+    "if (review.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode())) {\r\n    if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId()))\r\n        changeEncouragementStatus(encouragement, EncouragementResultEnum.SENT_FOR_CORRECTION.getCode(), null, null);\r\n}"
+  ],
+  "forwardPreviousManager / if (!approvedNextEncouragementReview.isEmpty())": [
+    "encouragementReviewService.deleteEncouragementReview(approvedNextEncouragementReview.get(0).getEncouragementReviewId());"
+  ],
+  "forwardPreviousManager / if (!encouragement.getEncouragementRegistrarOrganizationId().equals(review.getEncouragementReviewRegistrarOrganizationId()))": [
+    "encouragementReviewService.updateExistEncouragementReview(review, encouragement);"
+  ],
+  "forwardPreviousManager / if (deleteRecentManagerReview)": [
+    "encouragementReviewService.deleteEncouragementReview(review.getEncouragementReviewId());",
+    "forwardNextManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, thisEncouragementReview, deleteRecentManagerReview, encouragedPerson);"
+  ],
+  "forwardPreviousManager / else": [
+    "throw new GeneralException(\"مدیر قبلی ایی وجود ندارد.\");"
+  ],
+  "forwardPreviousManager / if (previousEncouragementReview.isPresent())": [
+    "EncouragementReview review \u003d previousEncouragementReview.get();",
+    "if (deleteRecentManagerReview) {\r\n    encouragementReviewService.deleteEncouragementReview(review.getEncouragementReviewId());\r\n    forwardNextManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, thisEncouragementReview, deleteRecentManagerReview, encouragedPerson);\r\n} else {\r\n    if (!encouragement.getEncouragementRegistrarOrganizationId().equals(review.getEncouragementReviewRegistrarOrganizationId()))\r\n        encouragementReviewService.updateExistEncouragementReview(review, encouragement);\r\n}"
+  ],
+  "forwardPreviousManager / if (!encouragement.getIsEncouragementSeen())": [
+    "sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);"
+  ],
+  "forwardPreviousManager / if (previousEncouragementReview.isEmpty() \u0026\u0026 encouragement.getIsEncouragementSeen())": [
+    "this.createReviewFromEncouragement(encouragement, previousManagerOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), creatorIndex - 2 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 2) : null);",
+    "if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId())) {\r\n    sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);\r\n}"
+  ],
+  "forwardPreviousManager / if (!encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()))": [
+    "if (previousEncouragementReview.isEmpty() \u0026\u0026 encouragement.getIsEncouragementSeen()) {\r\n    this.createReviewFromEncouragement(encouragement, previousManagerOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), creatorIndex - 2 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 2) : null);\r\n    if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId())) {\r\n        sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);\r\n    }\r\n} else {\r\n    if (!encouragement.getIsEncouragementSeen()) {\r\n        sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);\r\n    } else {\r\n        if (previousEncouragementReview.isPresent()) {\r\n            EncouragementReview review \u003d previousEncouragementReview.get();\r\n            if (deleteRecentManagerReview) {\r\n                encouragementReviewService.deleteEncouragementReview(review.getEncouragementReviewId());\r\n                forwardNextManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, thisEncouragementReview, deleteRecentManagerReview, encouragedPerson);\r\n            } else {\r\n                if (!encouragement.getEncouragementRegistrarOrganizationId().equals(review.getEncouragementReviewRegistrarOrganizationId()))\r\n                    encouragementReviewService.updateExistEncouragementReview(review, encouragement);\r\n            }\r\n        }\r\n        thisEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n    }\r\n}"
+  ],
+  "forwardPreviousManager / if (creatorIndex - 1 \u003e\u003d 0)": [
+    "Optional\u003cEncouragementReview\u003e nextEncouragementReview \u003d Optional.empty();",
+    "String nextManagerOrganizationId \u003d null;",
+    "String previousManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 1);",
+    "Optional\u003cEncouragementReview\u003e previousEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(previousManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "if (creatorIndex + 1 \u003c\u003d personnelManager.getPersonnelManagerOrganizationIdList().size() - 1) {\r\n    nextManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex + 1);\r\n    nextEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(nextManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\n}",
+    "if (thisEncouragementReview.isPresent()) {\r\n    EncouragementReview review \u003d thisEncouragementReview.get();\r\n    if (review.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode())) {\r\n        if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId()))\r\n            changeEncouragementStatus(encouragement, EncouragementResultEnum.SENT_FOR_CORRECTION.getCode(), null, null);\r\n    }\r\n}",
+    "Optional\u003cEncouragementReview\u003e commissionEncouragementReview \u003d encouragementReviewService.getAllCommissionReviewsForThisEncouragement(encouragement.getEncouragementId());",
+    "commissionEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));",
+    "if (!encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode())) {\r\n    if (previousEncouragementReview.isEmpty() \u0026\u0026 encouragement.getIsEncouragementSeen()) {\r\n        this.createReviewFromEncouragement(encouragement, previousManagerOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), creatorIndex - 2 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 2) : null);\r\n        if (previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId())) {\r\n            sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);\r\n        }\r\n    } else {\r\n        if (!encouragement.getIsEncouragementSeen()) {\r\n            sentForRegistrar(encouragement, personnelManager, creatorIndex, previousManagerOrganizationId);\r\n        } else {\r\n            if (previousEncouragementReview.isPresent()) {\r\n                EncouragementReview review \u003d previousEncouragementReview.get();\r\n                if (deleteRecentManagerReview) {\r\n                    encouragementReviewService.deleteEncouragementReview(review.getEncouragementReviewId());\r\n                    forwardNextManager(encouragement, personnelReviewCreator, personnelManager, managerPositionList, creatorIndex, thisEncouragementReview, deleteRecentManagerReview, encouragedPerson);\r\n                } else {\r\n                    if (!encouragement.getEncouragementRegistrarOrganizationId().equals(review.getEncouragementReviewRegistrarOrganizationId()))\r\n                        encouragementReviewService.updateExistEncouragementReview(review, encouragement);\r\n                }\r\n            }\r\n            thisEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n        }\r\n    }\r\n} else {\r\n    List\u003cEncouragementReview\u003e approvedNextEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithReviewerType(nextManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    if (!approvedNextEncouragementReview.isEmpty())\r\n        encouragementReviewService.deleteEncouragementReview(approvedNextEncouragementReview.get(0).getEncouragementReviewId());\r\n}"
+  ],
+  "sentForRegistrar / if (!previousManagerOrganizationId.equals(encouragement.getEncouragementRegistrarOrganizationId()))": [
+    "Optional\u003cEncouragementReview\u003e previousEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(previousManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "//        nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\npreviousEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));"
+  ],
+  "sentForRegistrar / if (registrarEncouragementReview.isEmpty())": [
+    "this.createReviewFromEncouragement(encouragement, registrarOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), registrarOrgIdIndex - 1 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(registrarOrgIdIndex - 1) : null);"
+  ],
+  "sentForRegistrar / else": [
+    "registrarEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));"
+  ],
+  "forwardNextManager / if (deleteRecentManagerReview)": [
+    "deleteRegistrarReviewIfExist(encouragement);"
+  ],
+  "forwardNextManager / if (optional.isEmpty())": [
+    "commissionInput(encouragement, personnelManager.getPersonnelManagerOrganizationIdList().size() - 1 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(personnelManager.getPersonnelManagerOrganizationIdList().size() - 1) : null, personnelReviewCreator);"
+  ],
+  "forwardNextManager / else": [
+    "if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode())) {\r\n    Optional\u003cEncouragementReview\u003e commissionEncouragementReview \u003d encouragementReviewService.getAllCommissionReviewsForThisEncouragement(encouragement.getEncouragementId());\r\n    commissionEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\n} else {\r\n    Optional\u003cEncouragementReview\u003e optional \u003d encouragementReviewService.getAllCommissionReviewsForThisEncouragement(encouragement.getEncouragementId());\r\n    if (optional.isEmpty()) {\r\n        commissionInput(encouragement, personnelManager.getPersonnelManagerOrganizationIdList().size() - 1 \u003e\u003d 0 ? personnelManager.getPersonnelManagerOrganizationIdList().get(personnelManager.getPersonnelManagerOrganizationIdList().size() - 1) : null, personnelReviewCreator);\r\n    } else {\r\n        EncouragementReview commissionReview \u003d optional.get();\r\n        encouragementReviewService.updateExistEncouragementReview(commissionReview, encouragement);\r\n        thisEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n    }\r\n}"
+  ],
+  "forwardNextManager / if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode()))": [
+    "nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));"
+  ],
+  "forwardNextManager / if (creatorIndex - 1 \u003e\u003d 0)": [
+    "String previousManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 1);",
+    "Optional\u003cEncouragementReview\u003e previousEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(previousManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "previousEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));"
+  ],
+  "forwardNextManager / if (!(encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode())))": [
+    "this.createReviewFromEncouragement(encouragement, nextManagerOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex));"
+  ],
+  "forwardNextManager / if (nextEncouragementReview.isPresent())": [
+    "if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode())) {\r\n    nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\n} else {\r\n    nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n    thisEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n}"
+  ],
+  "forwardNextManager / if (creatorIndex + 1 \u003c managerPositionList.size())": [
+    "String nextManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex + 1);",
+    "Optional\u003cEncouragementReview\u003e nextEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(nextManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());",
+    "if (creatorIndex - 1 \u003e\u003d 0) {\r\n    String previousManagerOrganizationId \u003d personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex - 1);\r\n    Optional\u003cEncouragementReview\u003e previousEncouragementReview \u003d encouragementReviewService.getReviewOfThisRegistrarThisEncouragementWithUnderReviewStatusAndReviewerType(previousManagerOrganizationId, encouragement.getEncouragementId(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode());\r\n    previousEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\n}",
+    "if (nextEncouragementReview.isPresent()) {\r\n    if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode())) {\r\n        nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.deleteEncouragementReview(encouragementReview.getEncouragementReviewId()));\r\n    } else {\r\n        nextEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n        thisEncouragementReview.ifPresent(encouragementReview -\u003e encouragementReviewService.updateExistEncouragementReview(encouragementReview, encouragement));\r\n    }\r\n} else if (!(encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.APPROVED.getCode())))\r\n    this.createReviewFromEncouragement(encouragement, nextManagerOrganizationId, ReviewResultEnum.UNDER_REVIEW.getCode(), ReviewTypeEnum.ORDINARY_REVIEWER.getCode(), DraftEnum.Nothing.getCode(), personnelManager.getPersonnelManagerOrganizationIdList().get(creatorIndex));"
+  ],
+  "createReviewFromEncouragement / if (draft.equals(DraftEnum.Sent.getCode()))": [
+    "encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());"
+  ],
+  "createReviewFromEncouragement / if (draft !\u003d null)": [
+    "encouragementReview.setEncouragementReviewDraft(DraftEnum.fromCode(draft));",
+    "if (draft.equals(DraftEnum.Sent.getCode()))\r\n    encouragementReview.setEncouragementReviewSentDraftDate(LocalDate.now());"
+  ],
+  "createReviewFromEncouragement / if (encouragement.getEncouragementRegistrarOrganizationId().equals(registrarOrganizationId))": [
+    "encouragementReview.setEncouragementReviewDescription(encouragement.getEncouragementDescription());"
+  ],
+  "createReviewFromEncouragement / if (previousManagerOrganizationId !\u003d null)": [
+    "encouragementReview.setEncouragementReviewPreviousOrganizationId(previousManagerOrganizationId);"
+  ],
+  "changeEncouragementStatus / if (status !\u003d null \u0026\u0026 (status.equals(EncouragementResultEnum.APPROVED.getCode()) || status.equals(EncouragementResultEnum.REJECTED.getCode()) || status.equals(EncouragementResultEnum.CORRECTION_AND_APPROVAL.getCode())))": [
+    "encouragement.setEncouragementAppliedDate(LocalDate.now());"
+  ],
+  "changeEncouragementStatus / if (status !\u003d null \u0026\u0026 (status.equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode())))": [
+    "encouragement.setIsEncouragementSeen(Boolean.FALSE);"
+  ],
+  "changeEncouragementStatus / if (encouragement !\u003d null)": [
+    "encouragement.setEncouragementStatus(status);",
+    "if (status !\u003d null \u0026\u0026 (status.equals(EncouragementResultEnum.APPROVED.getCode()) || status.equals(EncouragementResultEnum.REJECTED.getCode()) || status.equals(EncouragementResultEnum.CORRECTION_AND_APPROVAL.getCode()))) {\r\n    encouragement.setEncouragementAppliedDate(LocalDate.now());\r\n}",
+    "if (status !\u003d null \u0026\u0026 (status.equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode())))\r\n    encouragement.setIsEncouragementSeen(Boolean.FALSE);",
+    "encouragementRepository.save(encouragement);"
+  ],
+  "updateEncouragementReview / if (entity \u003d\u003d null)": [
+    "throw new GeneralException(\"بررسی تشویق مربوطه یافت نشد.\");"
+  ],
+  "updateEncouragementReview / if ((entity.getEncouragementReviewDraft() !\u003d null \u0026\u0026 entity.getEncouragementReviewDraft().equals(DraftEnum.Sent)) \u0026\u0026 (entity.getIsEncouragementReviewSeen() !\u003d null \u0026\u0026 entity.getIsEncouragementReviewSeen()))": [
+    "throw new GeneralException(\"این بررسی تشویق ارسال و مشاهده شده و قابل ویرایش نمی باشد.\");"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())) {\r\n    if (dto.getEncouragementAmount() !\u003d null)\r\n        encouragement.setEncouragementAmount(dto.getEncouragementAmount());\r\n    if (dto.getEncouragementAmountType() !\u003d null) {\r\n        encouragement.setEncouragementAmountType(dto.getEncouragementAmountType());\r\n    }\r\n    if (dto.getEncouragementReasonTypeId() !\u003d null) {\r\n        EncouragementReasonType reasonType \u003d encouragementReasonTypeService.findById(dto.getEncouragementReasonTypeId());\r\n        validate(dto.getEncouragementAmount(), reasonType);\r\n        encouragement.setEncouragementReasonTypeId(dto.getEncouragementReasonTypeId());\r\n    }\r\n    if (// تاریخ تصویب وارد شده توسط کاربر همان تاریخ تصویب حقیقی تشویق؟\r\n    dto.getEncouragementReviewAppliedDate() !\u003d null)\r\n        encouragement.setEncouragementAppliedDate(dto.getEncouragementReviewAppliedDate());\r\n    //                    this.changeEncouragementStatus(encouragement, dto.getEncouragementReviewResult(), null);\r\n}"
+  ],
+  "updateEncouragementReview / if (entity.getEncouragementReviewId() !\u003d null)": [
+    "FileAttachmentDTO fileAttachmentDTO \u003d FileAttachmentDTO.builder().encouragementReviewId(entity.getEncouragementReviewId()).build();",
+    "addFile(fileList, deleteFileIdList, fileAttachmentDTO);"
+  ],
+  "updateEncouragementReview / if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.VEDJA_COMMISSION.getCode()))": [
+    "optional \u003d encouragementReviewService.getAllVedjaReviewsForThisEncouragement(encouragement.getEncouragementId());"
+  ],
+  "updateEncouragementReview / if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))": [
+    "optional \u003d encouragementReviewService.getAllCommissionReviewsForThisEncouragement(encouragement.getEncouragementId());"
+  ],
+  "updateEncouragementReview / else": [
+    "if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.VEDJA_COMMISSION.getCode()))\r\n    optional \u003d encouragementReviewService.getAllVedjaReviewsForThisEncouragement(encouragement.getEncouragementId());"
+  ],
+  "updateEncouragementReview / if (((dto.getEncouragementAmount() !\u003d null \u0026\u0026 !dto.getEncouragementAmount().equals(encouragement.getEncouragementAmount())) || (dto.getEncouragementAmountType() !\u003d null \u0026\u0026 !dto.getEncouragementAmountType().equals(encouragement.getEncouragementAmountType())) || (dto.getEncouragementReasonTypeId() !\u003d null \u0026\u0026 !dto.getEncouragementReasonTypeId().equals(encouragement.getEncouragementReasonTypeId()))) \u0026\u0026 !(dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())))": [
+    "throw new GeneralException(\" فقط در وضعیت اصلاح و تایید، می توانید نوع و میزان را تغییر دهید.\");"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementAmount() !\u003d null)": [
+    "encouragementReview.setEncouragementReviewAmount(dto.getEncouragementAmount());"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementAmountType() !\u003d null)": [
+    "encouragementReview.setEncouragementReviewEncouragementAmountType(encouragement.getEncouragementAmountType());"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementReasonTypeId() !\u003d null)": [
+    "encouragementReview.setEncouragementReviewReasonTypeId(dto.getEncouragementReasonTypeId());"
+  ],
+  "updateEncouragementReview / if (// تاریخ تصویب وارد شده توسط کاربر همان تاریخ تصویب حقیقی تشویق؟\r\ndto.getEncouragementReviewAppliedDate() !\u003d null)": [
+    "encouragement.setEncouragementAppliedDate(dto.getEncouragementReviewAppliedDate());"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode()))": [
+    "if (dto.getEncouragementAmount() !\u003d null)\r\n    encouragement.setEncouragementAmount(dto.getEncouragementAmount());",
+    "if (dto.getEncouragementAmountType() !\u003d null) {\r\n    encouragement.setEncouragementAmountType(dto.getEncouragementAmountType());\r\n}",
+    "if (dto.getEncouragementReasonTypeId() !\u003d null) {\r\n    EncouragementReasonType reasonType \u003d encouragementReasonTypeService.findById(dto.getEncouragementReasonTypeId());\r\n    validate(dto.getEncouragementAmount(), reasonType);\r\n    encouragement.setEncouragementReasonTypeId(dto.getEncouragementReasonTypeId());\r\n}",
+    "if (// تاریخ تصویب وارد شده توسط کاربر همان تاریخ تصویب حقیقی تشویق؟\r\ndto.getEncouragementReviewAppliedDate() !\u003d null)\r\n    encouragement.setEncouragementAppliedDate(dto.getEncouragementReviewAppliedDate());"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode()) \u0026\u0026 !dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "if (dto.getEncouragementAmount() !\u003d null) {\r\n    encouragementReview.setEncouragementReviewAmount(dto.getEncouragementAmount());\r\n}",
+    "if (dto.getEncouragementAmountType() !\u003d null) {\r\n    encouragementReview.setEncouragementReviewAmountType(dto.getEncouragementAmountType());\r\n}",
+    "if (dto.getEncouragementReasonTypeId() !\u003d null) {\r\n    EncouragementReasonType reasonType \u003d encouragementReasonTypeService.findById(dto.getEncouragementReasonTypeId());\r\n    validate(dto.getEncouragementAmount(), reasonType);\r\n    encouragementReview.setEncouragementReviewReasonTypeId(dto.getEncouragementReasonTypeId());\r\n}"
+  ],
+  "updateEncouragementReview / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "if (dto.getEncouragementAmount() !\u003d null) {\r\n    encouragementReview.setEncouragementReviewAmount(dto.getEncouragementAmount());\r\n}",
+    "if (dto.getEncouragementAmountType() !\u003d null) {\r\n    encouragementReview.setEncouragementReviewEncouragementAmountType(encouragement.getEncouragementAmountType());\r\n}",
+    "if (dto.getEncouragementReasonTypeId() !\u003d null) {\r\n    encouragementReview.setEncouragementReviewReasonTypeId(dto.getEncouragementReasonTypeId());\r\n}"
+  ],
+  "updateEncouragementReview / if (entity.getEncouragementReviewRegistrarOrganizationId() \u003d\u003d null)": [
+    "encouragementReview.setEncouragementReviewRegistrarOrganizationId(currentUser.getPersonnelOrganizationID());"
+  ],
+  "addFile / if (fileAttachmentDTO !\u003d null \u0026\u0026 fileList !\u003d null)": [
+    "attachmentService.addAttachmentForEncouragement(fileList, fileAttachmentDTO);"
+  ],
+  "addFile / if (deleteFileIdList !\u003d null)": [
+    "deleteFileIdList.forEach(s -\u003e attachmentService.deleteAttachmentFile(UUID.fromString(s)));"
+  ],
+  "createEncouragementConcatenatedDescription / if (encouragementReviewType.equals(ReviewTypeEnum.VEDJA_COMMISSION.getCode()))": [
+    "personnelOrganizationID \u003d \"ودجا\";"
+  ],
+  "createEncouragementConcatenatedDescription / if (encouragementReviewType.equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))": [
+    "personnelOrganizationID \u003d \"کمیسیون\";"
+  ],
+  "createEncouragementConcatenatedDescription / else": [
+    "if (dto.getEncouragementReasonTypeId() !\u003d null \u0026\u0026 !dto.getEncouragementReasonTypeId().equals(encouragement.getEncouragementReasonTypeId())) {\r\n    Optional\u003cEncouragementReasonType\u003e reasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(encouragement.getEncouragementReasonTypeId());\r\n    //            Optional\u003cEncouragementReasonType\u003e newReasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(dto.getEncouragementReasonTypeId());\r\n    String typeTitle \u003d encouragementReasonTypeRepository.getTypeTitleWithReasonTypeId(encouragement.getEncouragementReasonTypeId());\r\n    String newTypeTitle \u003d encouragementReasonTypeRepository.getTypeTitleWithReasonTypeId(dto.getEncouragementReasonTypeId());\r\n    String description \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");\r\n    String newLine \u003d \"\";\r\n    if (reasonType.isPresent()) {\r\n        EncouragementReasonType encouragementReasonType \u003d reasonType.get();\r\n        if (encouragementReasonType.getMaxAmount() !\u003d null)\r\n            newLine \u003d String.format(\"تشویق از نوع: %s به مبلغ %s تومان ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");\r\n        if (encouragementReasonType.getMaxDuration() !\u003d null)\r\n            newLine \u003d String.format(\"تشویق از نوع: %s به میزان %s روز ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");\r\n        if (encouragementReasonType.getMaxAmount() \u003d\u003d null \u0026\u0026 encouragementReasonType.getMaxDuration() \u003d\u003d null)\r\n            newLine \u003d String.format(\"تشویق از نوع: %s ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, personnelOrganizationID, newTypeTitle).concat(description);\r\n    }\r\n    result \u003d previous.isEmpty() ? newLine : previous + newLine;\r\n} else if (dto.getEncouragementAmount() \u003d\u003d null \u0026\u0026 dto.getEncouragementReasonTypeId() \u003d\u003d null) {\r\n    String newLine \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");\r\n    result \u003d previous.isEmpty() ? newLine : previous + newLine;\r\n} else if (dto.getEncouragementReviewDescription() !\u003d null) {\r\n    String newLine \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");\r\n    result \u003d previous.isEmpty() ? newLine : previous + newLine;\r\n}"
+  ],
+  "createEncouragementConcatenatedDescription / if (dto.getEncouragementReviewDescription() !\u003d null)": [
+    "String newLine \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");",
+    "result \u003d previous.isEmpty() ? newLine : previous + newLine;"
+  ],
+  "createEncouragementConcatenatedDescription / if (dto.getEncouragementAmount() \u003d\u003d null \u0026\u0026 dto.getEncouragementReasonTypeId() \u003d\u003d null)": [
+    "String newLine \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");",
+    "result \u003d previous.isEmpty() ? newLine : previous + newLine;"
+  ],
+  "createEncouragementConcatenatedDescription / if (encouragementReasonType.getMaxAmount() !\u003d null)": [
+    "newLine \u003d String.format(\"تشویق از نوع: %s به مبلغ %s تومان ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");"
+  ],
+  "createEncouragementConcatenatedDescription / if (encouragementReasonType.getMaxDuration() !\u003d null)": [
+    "newLine \u003d String.format(\"تشویق از نوع: %s به میزان %s روز ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");"
+  ],
+  "createEncouragementConcatenatedDescription / if (encouragementReasonType.getMaxAmount() \u003d\u003d null \u0026\u0026 encouragementReasonType.getMaxDuration() \u003d\u003d null)": [
+    "newLine \u003d String.format(\"تشویق از نوع: %s ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, personnelOrganizationID, newTypeTitle).concat(description);"
+  ],
+  "createEncouragementConcatenatedDescription / if (reasonType.isPresent())": [
+    "EncouragementReasonType encouragementReasonType \u003d reasonType.get();",
+    "if (encouragementReasonType.getMaxAmount() !\u003d null)\r\n    newLine \u003d String.format(\"تشویق از نوع: %s به مبلغ %s تومان ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");",
+    "if (encouragementReasonType.getMaxDuration() !\u003d null)\r\n    newLine \u003d String.format(\"تشویق از نوع: %s به میزان %s روز ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");",
+    "if (encouragementReasonType.getMaxAmount() \u003d\u003d null \u0026\u0026 encouragementReasonType.getMaxDuration() \u003d\u003d null)\r\n    newLine \u003d String.format(\"تشویق از نوع: %s ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, personnelOrganizationID, newTypeTitle).concat(description);"
+  ],
+  "createEncouragementConcatenatedDescription / if (dto.getEncouragementReasonTypeId() !\u003d null \u0026\u0026 !dto.getEncouragementReasonTypeId().equals(encouragement.getEncouragementReasonTypeId()))": [
+    "Optional\u003cEncouragementReasonType\u003e reasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(encouragement.getEncouragementReasonTypeId());",
+    "//            Optional\u003cEncouragementReasonType\u003e newReasonType \u003d encouragementReasonTypeRepository.findByEncouragementReasonTypeId(dto.getEncouragementReasonTypeId());\r\nString typeTitle \u003d encouragementReasonTypeRepository.getTypeTitleWithReasonTypeId(encouragement.getEncouragementReasonTypeId());",
+    "String newTypeTitle \u003d encouragementReasonTypeRepository.getTypeTitleWithReasonTypeId(dto.getEncouragementReasonTypeId());",
+    "String description \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\").concat(\"/n\");",
+    "String newLine \u003d \"\";",
+    "if (reasonType.isPresent()) {\r\n    EncouragementReasonType encouragementReasonType \u003d reasonType.get();\r\n    if (encouragementReasonType.getMaxAmount() !\u003d null)\r\n        newLine \u003d String.format(\"تشویق از نوع: %s به مبلغ %s تومان ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");\r\n    if (encouragementReasonType.getMaxDuration() !\u003d null)\r\n        newLine \u003d String.format(\"تشویق از نوع: %s به میزان %s روز ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, encouragement.getEncouragementAmount(), personnelOrganizationID, newTypeTitle).concat(description).concat(\"/n\");\r\n    if (encouragementReasonType.getMaxAmount() \u003d\u003d null \u0026\u0026 encouragementReasonType.getMaxDuration() \u003d\u003d null)\r\n        newLine \u003d String.format(\"تشویق از نوع: %s ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", typeTitle, personnelOrganizationID, newTypeTitle).concat(description);\r\n}",
+    "result \u003d previous.isEmpty() ? newLine : previous + newLine;"
+  ],
+  "createEncouragementConcatenatedDescription / if (!Objects.equals(dto.getEncouragementAmount(), encouragement.getEncouragementAmount()) \u0026\u0026 dto.getEncouragementReasonTypeId() !\u003d null \u0026\u0026 dto.getEncouragementReasonTypeId().equals(encouragement.getEncouragementReasonTypeId()))": [
+    "String description \u003d String.format(\"نظر مدیر %s :\", personnelOrganizationID).concat(dto.getEncouragementReviewDescription() !\u003d null ? dto.getEncouragementReviewDescription() : \"\");",
+    "String newLine \u003d String.format(\"تشویق با میزان: %s ثبت شده بود اما توسط مدیر %s به %s تغییر یافت.\", encouragementReviewEncouragementAmount, personnelOrganizationID, dto.getEncouragementAmount()).concat(description).concat(\"/n\");",
+    "result \u003d previous.isEmpty() ? newLine : previous + newLine;"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (entity.getIsEncouragementReviewSeen())": [
+    "throw new GeneralException(\"این بررسی مشاهده شده است و قابل ویرایش نمی باشد.\");"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementTypeId() !\u003d null) {\r\n    if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_REVIEWER.getCode())) {\r\n        this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n    } else {\r\n        if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_ENCOURAGEMENT_SPECIALIST.getCode())) {\r\n            sendForVedjaCommission(encouragement, currentUser);\r\n            encouragementReviewService.updateExistEncouragementReview(entity, encouragement);\r\n        } else if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECT_TO_COMMISSION.getCode())) {\r\n            this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, null, currentUserRole);\r\n        } else {\r\n            //                            entity.setIsEncouragementReviewSeen(Boolean.TRUE);\r\n            if ((dto.getEncouragementReviewResult().equals(ReviewResultEnum.APPROVED.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())) \u0026\u0026 entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))\r\n                this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n            else\r\n                this.changeEncouragementStatus(encouragement, dto.getEncouragementReviewResult(), currentUser.getPersonnelOrganizationID(), entity.getEncouragementReviewType());\r\n        }\r\n    }\r\n}"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "encouragement.setIsEncouragementSeen(Boolean.FALSE);",
+    "this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode()))": [
+    "deleteRegistrarReviewIfExist(encouragement);",
+    "this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, entity.getEncouragementReviewPreviousOrganizationId(), currentUserRole);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult() !\u003d null)": [
+    "if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n    encouragement.setIsEncouragementSeen(Boolean.FALSE);\r\n    this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n}",
+    "if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n    deleteRegistrarReviewIfExist(encouragement);\r\n    this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, entity.getEncouragementReviewPreviousOrganizationId(), currentUserRole);\r\n}"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementTypeId() !\u003d null)": [
+    "if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_REVIEWER.getCode())) {\r\n    this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n} else {\r\n    if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_ENCOURAGEMENT_SPECIALIST.getCode())) {\r\n        sendForVedjaCommission(encouragement, currentUser);\r\n        encouragementReviewService.updateExistEncouragementReview(entity, encouragement);\r\n    } else if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECT_TO_COMMISSION.getCode())) {\r\n        this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, null, currentUserRole);\r\n    } else {\r\n        //                            entity.setIsEncouragementReviewSeen(Boolean.TRUE);\r\n        if ((dto.getEncouragementReviewResult().equals(ReviewResultEnum.APPROVED.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())) \u0026\u0026 entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))\r\n            this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n        else\r\n            this.changeEncouragementStatus(encouragement, dto.getEncouragementReviewResult(), currentUser.getPersonnelOrganizationID(), entity.getEncouragementReviewType());\r\n    }\r\n}"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult() !\u003d null \u0026\u0026 dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECTED.getCode()))": [
+    "if (dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n    if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementTypeId() !\u003d null) {\r\n        this.changeEncouragementStatus(encouragement, EncouragementResultEnum.REJECTED.getCode(), currentUser.getPersonnelOrganizationID(), entity.getEncouragementReviewType());\r\n        this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, entity.getEncouragementReviewRegistrarOrganizationId(), currentUserRole);\r\n    }\r\n}"
+  ],
+  "updateEachEncouragementReviewThatNeeded / else": [
+    "if (dto.getEncouragementReviewResult() !\u003d null \u0026\u0026 dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECTED.getCode())) {\r\n    if (dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n        if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementTypeId() !\u003d null) {\r\n            this.changeEncouragementStatus(encouragement, EncouragementResultEnum.REJECTED.getCode(), currentUser.getPersonnelOrganizationID(), entity.getEncouragementReviewType());\r\n            this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, entity.getEncouragementReviewRegistrarOrganizationId(), currentUserRole);\r\n        }\r\n    }\r\n} else if (dto.getEncouragementReviewResult() !\u003d null) {\r\n    if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_REGISTRAR_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n        encouragement.setIsEncouragementSeen(Boolean.FALSE);\r\n        this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, encouragement.getEncouragementRegistrarOrganizationId(), currentUserRole);\r\n    }\r\n    if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_RECENT_MANAGER_CORRECTION.getCode()) \u0026\u0026 dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n        deleteRegistrarReviewIfExist(encouragement);\r\n        this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), false, false, true, entity.getEncouragementReviewPreviousOrganizationId(), currentUserRole);\r\n    }\r\n}"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if ((dto.getEncouragementReviewResult().equals(ReviewResultEnum.APPROVED.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())) \u0026\u0026 entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))": [
+    "this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECT_TO_COMMISSION.getCode()))": [
+    "this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, null, currentUserRole);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_ENCOURAGEMENT_SPECIALIST.getCode()))": [
+    "sendForVedjaCommission(encouragement, currentUser);",
+    "encouragementReviewService.updateExistEncouragementReview(entity, encouragement);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_REVIEWER.getCode()))": [
+    "this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);"
+  ],
+  "updateEachEncouragementReviewThatNeeded / if (dto.getEncouragementReviewResult() !\u003d null \u0026\u0026 (dto.getEncouragementReviewResult().equals(ReviewResultEnum.APPROVED.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_ENCOURAGEMENT_SPECIALIST.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECT_TO_COMMISSION.getCode())))": [
+    "if (dto.getEncouragementReviewDraft().equals(DraftEnum.Sent.getCode())) {\r\n    if (reasonType !\u003d null \u0026\u0026 reasonType.getEncouragementTypeId() !\u003d null) {\r\n        if (entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_REVIEWER.getCode())) {\r\n            this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n        } else {\r\n            if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.SENT_FOR_ENCOURAGEMENT_SPECIALIST.getCode())) {\r\n                sendForVedjaCommission(encouragement, currentUser);\r\n                encouragementReviewService.updateExistEncouragementReview(entity, encouragement);\r\n            } else if (dto.getEncouragementReviewResult().equals(ReviewResultEnum.REJECT_TO_COMMISSION.getCode())) {\r\n                this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, false, null, currentUserRole);\r\n            } else {\r\n                //                            entity.setIsEncouragementReviewSeen(Boolean.TRUE);\r\n                if ((dto.getEncouragementReviewResult().equals(ReviewResultEnum.APPROVED.getCode()) || dto.getEncouragementReviewResult().equals(ReviewResultEnum.CORRECTION_AND_APPROVAL.getCode())) \u0026\u0026 entity.getEncouragementReviewType().equals(ReviewTypeEnum.ORDINARY_COMMISSION.getCode()))\r\n                    this.calculator(encouragement, reasonType.getEncouragementTypeId(), currentUser, Boolean.TRUE, dto.getEncouragementReviewDraft(), true, true, true, currentUser.getPersonnelOrganizationID(), currentUserRole);\r\n                else\r\n                    this.changeEncouragementStatus(encouragement, dto.getEncouragementReviewResult(), currentUser.getPersonnelOrganizationID(), entity.getEncouragementReviewType());\r\n            }\r\n        }\r\n    }\r\n}"
+  ],
+  "encouragementInitialPreparation / if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.REJECTED.getCode()) || encouragement.getEncouragementStatus().equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode()))": [
+    "encouragement.setEncouragementStatus(EncouragementResultEnum.UNDER_REVIEW.getCode());"
+  ],
+  "encouragementInitialPreparation / if (!encouragement.getIsEncouragementSeen())": [
+    "encouragement.setIsEncouragementSeen(Boolean.TRUE);"
+  ],
+  "sendForVedjaCommission / if (optional.isEmpty())": [
+    "createReviewFromEncouragement(encouragement, null, ReviewResultEnum.UNDER_VEDJA_REVIEW.getCode(), ReviewTypeEnum.VEDJA_COMMISSION.getCode(), DraftEnum.Nothing.getCode(), null);",
+    "this.changeEncouragementStatus(encouragement, EncouragementResultEnum.UNDER_VEDJA_REVIEW.getCode(), currentUser.getPersonnelOrganizationID(), ReviewTypeEnum.VEDJA_COMMISSION.getCode());"
+  ],
+  "sendForVedjaCommission / else": [
+    "EncouragementReview nextEncouragementReview \u003d optional.get();",
+    "encouragementReviewService.updateExistEncouragementReview(nextEncouragementReview, encouragement);"
+  ],
+  "updateNonNullFields / if (dto.getEncouragementReviewDescription() !\u003d null)": [
+    "entity.setEncouragementReviewDescription(dto.getEncouragementReviewDescription());"
+  ],
+  "updateNonNullFields / if (dto.getEncouragementReviewDraft() !\u003d null)": [
+    "entity.setEncouragementReviewDraft(DraftEnum.fromCode(dto.getEncouragementReviewDraft()));"
+  ],
+  "updateNonNullFields / if (dto.getEncouragementReviewResult() !\u003d null)": [
+    "entity.setEncouragementReviewResult(dto.getEncouragementReviewResult());"
+  ],
+  "getAllEncouragementReviews / if (Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST))": [
+    "dto.setEncouragementReviewTypeList(List.of(ReviewTypeEnum.ORDINARY_COMMISSION.getCode(), ReviewTypeEnum.VEDJA_COMMISSION.getCode()));"
+  ],
+  "getAllEncouragementReviews / else": [
+    "return new PageImpl\u003c\u003e(dtoList, pageRequest, 0);"
+  ],
+  "getAllEncouragementReviews / if (list !\u003d null \u0026\u0026 list.size() \u003e 0)": [
+    "List\u003cString\u003e orgIdList \u003d list.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());",
+    "dto.setEncouragementReviewEncouragedRegistrarOrganizationIdList(orgIdList);"
+  ],
+  "getAllEncouragementReviews / if (dto.getEncouragementReviewEncouragedLastName() !\u003d null)": [
+    "List\u003c? extends BasePersonnelDTO\u003e list \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(dto.getEncouragementReviewEncouragedLastName()).type(\"basePersonnel\").build());",
+    "if (list !\u003d null \u0026\u0026 list.size() \u003e 0) {\r\n    List\u003cString\u003e orgIdList \u003d list.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    dto.setEncouragementReviewEncouragedOrganizationIdList(orgIdList);\r\n} else\r\n    return new PageImpl\u003c\u003e(dtoList, pageRequest, 0);"
+  ],
+  "getAllEncouragementReviews / if (dto.getEncouragementReviewEncouragedRegistrarLastName() !\u003d null)": [
+    "List\u003c? extends BasePersonnelDTO\u003e list \u003d personnelService.getFilteredPersonnel(PersonnelFilterDTOV2.builder().personnelLastName(dto.getEncouragementReviewEncouragedRegistrarLastName()).type(\"basePersonnel\").build());",
+    "if (list !\u003d null \u0026\u0026 list.size() \u003e 0) {\r\n    List\u003cString\u003e orgIdList \u003d list.stream().map(BasePersonnelDTO::getPersonnelOrganizationID).collect(Collectors.toList());\r\n    dto.setEncouragementReviewEncouragedRegistrarOrganizationIdList(orgIdList);\r\n} else\r\n    return new PageImpl\u003c\u003e(dtoList, pageRequest, 0);"
+  ],
+  "getAllEncouragementReviews / if (Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.HUMAN_RESOURCE_COMMISSION_ADMIN) || Objects.equals(RoleConstant.ROLE.fromValue(currentUserRole), RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST))": [
+    "List\u003cAttachment\u003e attachmentGetDTOList \u003d attachmentService.getAllEncouragementAttachments(PageRequest.of(0, 9000), FileAttachmentDTO.builder().encouragementReviewId(encouragementReview.getEncouragementReviewId()).build(), false);",
+    "encouragementReviewDTO.setAttachmentList(attachmentGetDTOList);"
+  ],
+  "getAllEncouragementReviews / if (optional.isPresent())": [
+    "Encouragement encouragement \u003d optional.get();",
+    "PersonnelDTO relatedEncouragementPersonnelDTO \u003d (PersonnelDTO) personnelService.findByOrganizationId(encouragement.getEncouragementPersonnelOrganizationId(), typeOfPersonnelDTOSending);",
+    "encouragementReviewDTO.setEncouragementReviewEncouragementPersonnelDTO(relatedEncouragementPersonnelDTO);",
+    "PersonnelDTO registrarEncouragementPersonnelDTO \u003d (PersonnelDTO) personnelService.findByOrganizationId(encouragement.getEncouragementRegistrarOrganizationId(), typeOfPersonnelDTOSending);",
+    "encouragementReviewDTO.setEncouragementReviewRegistrarPersonnelDTO(registrarEncouragementPersonnelDTO);",
+    "encouragementReviewDTO.setEncouragementNumber(encouragement.getEncouragementNumber());",
+    "this.updateEncouragementAndReviewHasBeenSeen(encouragement, encouragementReview, pageRequest, currentUser.getPersonnelOrganizationID(), currentUserRole);"
+  ],
+  "updateEncouragementAndReviewHasBeenSeen / if ((encouragement.getIsEncouragementSeen() \u003d\u003d null || !encouragement.getIsEncouragementSeen()) \u0026\u0026 !encouragement.getEncouragementStatus().equals(EncouragementResultEnum.SENT_FOR_CORRECTION.getCode()))": [
+    "encouragement.setIsEncouragementSeen(Boolean.TRUE);",
+    "//            if (encouragement.getEncouragementStatus().equals(EncouragementResultEnum.DRAFT.getCode()))\r\n//                updateExistEncouragement(encouragementReview, encouragement);\r\nencouragementRepository.save(encouragement);"
+  ],
+  "getEncouragementFlow / if (encouragementReview.getEncouragementReviewRegistrarOrganizationId() !\u003d null)": [
+    "try {\r\n    eachManager \u003d personnelService.findByOrganizationId(encouragementReview.getEncouragementReviewRegistrarOrganizationId(), typeOfBasePersonnelDTOSending);\r\n} catch (ExecutionException | InterruptedException e) {\r\n    throw new RuntimeException(e);\r\n}"
+  ],
+  "getEncouragementFlow / if (optional1.isPresent())": [
+    "EncouragementReason encouragementReason \u003d optional1.get();",
+    "reasonTitle \u003d encouragementReason.getEncouragementReasonTitle();"
+  ],
+  "getEncouragementFlow / if (optional.isPresent())": [
+    "EncouragementReasonType encouragementReasonType \u003d optional.get();",
+    "Optional\u003cEncouragementReason\u003e optional1 \u003d encouragementReviewService.getEncouragementReason(encouragementReasonType.getEncouragementReasonId());",
+    "if (optional1.isPresent()) {\r\n    EncouragementReason encouragementReason \u003d optional1.get();\r\n    reasonTitle \u003d encouragementReason.getEncouragementReasonTitle();\r\n}"
+  ],
+  "getCountOfEncouragementReviewIncoming / if (profile.getCurrentRole().equals(RoleConstant.ROLE.PERSONNEL.getValue()))": [
+    "encouragementReviewResultList.add(ReviewResultEnum.UNDER_REVIEW.getCode());",
+    "personnelOrganizationID \u003d currentUser.getPersonnelOrganizationID();",
+    "encouragementReviewTypeList.add(ReviewTypeEnum.ORDINARY_REVIEWER.getCode());"
+  ],
+  "getCountOfEncouragementReviewIncoming / if (profile.getCurrentRole().equals(RoleConstant.ROLE.ENCOURAGEMENT_SPECIALIST.getValue()))": [
+    "encouragementReviewResultList.add(ReviewResultEnum.UNDER_VEDJA_REVIEW.getCode());",
+    "encouragementReviewTypeList.add(ReviewTypeEnum.VEDJA_COMMISSION.getCode());",
+    "encouragementReviewResultList.add(ReviewResultEnum.UNDER_COMMISSION_REVIEW.getCode());",
+    "encouragementReviewTypeList.add(ReviewTypeEnum.ORDINARY_COMMISSION.getCode());"
+  ],
+  "getCountOfEncouragementReviewIncoming / if (page !\u003d null)": [
+    "unSeenCountDTO.setUnSeenEncouragementReview(page.toList().size());"
+  ]
+}

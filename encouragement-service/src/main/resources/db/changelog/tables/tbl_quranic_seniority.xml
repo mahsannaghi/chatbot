@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="11" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_quranic_seniority"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_quranic_seniority">
+            <column name="quranic_seniority_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="quranic_seniority_type" type="NVARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quranic_seniority_amount" type="NVARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quranic_seniority_max_amount" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quranic_seniority_is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

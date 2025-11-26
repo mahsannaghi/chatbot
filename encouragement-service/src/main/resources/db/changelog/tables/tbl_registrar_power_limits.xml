@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="12" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_registrar_power_limits"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_registrar_power_limits">
+            <column name="registrar_power_limits_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="registrar_power_limits_encouragement_type_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="registrar_power_limits_rank_type_code" type="INT"/>
+
+            <column name="registrar_power_limits_job_position_code" type="INT"/>
+
+            <column name="registrar_power_limits_grade_id" type="UUID"/>
+
+            <column name="registrar_power_limits_job_position_id" type="UUID"/>
+
+            <column name="registrar_power_limits_max_amount" type="DECIMAL(18, 2)"/>
+
+            <column name="registrar_power_limits_max_duration" type="INT"/>
+
+            <column name="registrar_power_limits_duration_type" type="INT"/>
+
+            <column name="registrar_power_limits_create_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

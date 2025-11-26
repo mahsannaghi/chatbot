@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- تغییرات مربوط به ایجاد جدول tbl_queue -->
+    <changeSet author="amiri" id="10" context="development">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_queue">
+            <column name="queue_id" type="char(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="request_queue_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response_queue_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
+</databaseChangeLog>

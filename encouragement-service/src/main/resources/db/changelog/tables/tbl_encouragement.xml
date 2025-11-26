@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="4" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_encouragement">
+            <column name="encouragement_id" type="UNIQUEIDENTIFIER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="encouragement_personnel_organization_id" type="VARCHAR(255)"/>
+
+            <column name="encouragement_registrar_organization_id" type="VARCHAR(255)"/>
+
+            <column name="encouragement_approver_organization_id" type="VARCHAR(255)"/>
+
+            <column name="encouragement_reason_type_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="encouragement_number" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="encouragement_created_at" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="encouragement_amount" type="BIGINT"/>
+
+            <column name="encouragement_amount_type" type="INT"/>
+
+            <column name="encouragement_description" type="VARCHAR(255)"/>
+
+            <column name="encouragement_managers_concatenated_description" type="VARCHAR(5000)"/>
+
+            <column name="encouragement_status" type="INT"/>
+
+            <column name="encouragement_applied_date" type="DATE"/>
+
+            <column name="encouragement_sent_draft_date" type="DATE"/>
+
+            <column name="encouragement_draft" type="INT"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

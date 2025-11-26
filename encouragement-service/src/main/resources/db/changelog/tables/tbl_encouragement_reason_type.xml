@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Create the Table -->
+    <changeSet id="6" author="amiri">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tbl_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tbl_encouragement_reason_type">
+            <column name="encouragement_reason_type_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="encouragement_reason_type_encouragement_reason_id" type="UUID"/>
+
+            <column name="encouragement_reason_type_encouragement_type_id" type="UUID"/>
+
+            <column name="encouragement_reason_type_max_amount" type="DECIMAL(18,0)"/>
+
+            <column name="encouragement_reason_type_max_duration" type="INT"/>
+
+            <column name="encouragement_reason_type_duration_type" type="VARCHAR(255)"/>
+
+            <column name="encouragement_reason_type_is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
