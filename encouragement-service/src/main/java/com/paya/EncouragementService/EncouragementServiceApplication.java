@@ -15,7 +15,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -419,11 +418,11 @@ public class EncouragementServiceApplication {
 			methodsList.forEach(methodDeclaration -> extractInnerMethods(methodDeclaration.getNameAsString(), methodDeclaration.toString(), methodsCallingInnerMethodSet, allClasses));
 		if (businessBlocksMapTag.isEmpty())
 			tagIfAndElse();
-//		finalOfAll("if the amount of encouragement be outer of Registrar Power Limits amount what happened in calculator?");
-//		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?", allClasses);
-		finalOfAll("when the calculator method is called?", allClasses);
-//		finalOfAll("when does changeEncouragementStatus to UNDER_COMMISSION_REVIEW?");
-//		finalOfAll("when does deleteEncouragementReview call?");
+//		finalOfAll("if the amount of encouragement be outer of Registrar Power Limits amount what happened in calculator?", allClasses);
+		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?", allClasses);
+//		finalOfAll("when the calculator method is called?", allClasses);
+//		finalOfAll("when does changeEncouragementStatus to UNDER_COMMISSION_REVIEW?", allClasses);
+//		finalOfAll("when does deleteEncouragementReview call?", allClasses);
 		String json1 = Files.readString(Path.of("F:/Projects/encouragement-develop/encouragement-service/updatedEmbeddingsqQ.json"));
 		ObjectMapper mapper = new ObjectMapper();
 		// تبدیل JSON به Map
@@ -1229,11 +1228,11 @@ public class EncouragementServiceApplication {
 
 			List<String> methodsContain = optional.stream().map(s -> Arrays.stream(s.split("/")).toList().get(0).trim()).toList();
 			List<MethodDeclaration> methodDeclarationList = methodsList.stream().filter(methodDeclaration -> methodsContain.contains(methodDeclaration.getName().toString())).toList();
-			methodDeclarationList.forEach(s -> answerFromCodeWithBlock(s.toString(), question));
+			methodDeclarationList.forEach(s -> answerFromCodeWithBlock(s.getNameAsString(), s.toString(), question));
 //			String solution = getSolutionFromMultipleMethods(businessBlocksMap, question);
 		} else if (question.startsWith("when")) {
-			String questionLower = question.toLowerCase();
-			Set<String> questionWords = new HashSet<>(Arrays.asList(questionLower.split("\\W+")));
+//			String questionLower = question.toLowerCase();
+			Set<String> questionWords = new HashSet<>(Arrays.asList(question.split("\\W+")));
 			questionWords.remove("the");
 			questionWords.remove("is");
 			questionWords.remove("when");
@@ -1247,10 +1246,9 @@ public class EncouragementServiceApplication {
 				for (Map.Entry<String, Set<String>> entry : stringListMap.entrySet()) {
 					String key = entry.getKey();
 					Set<String> value = entry.getValue();
-					List<String> lowerValue = value.stream().map(String::toLowerCase).toList();
 					int matches = 0;
 					for (String qw : questionWords) {
-						for (String eachValue : lowerValue) {
+						for (String eachValue : value) {
 							if (qw.length() > 2 && eachValue.contains(qw)) {
 								matches++;
 								if (innerMethod == null)
@@ -1734,7 +1732,7 @@ public class EncouragementServiceApplication {
 
 
 	private static String
-	answerFromCodeWithBlock(String codeSnippet, String userQuestion) {
+	answerFromCodeWithBlock(String outerMethodName, String codeSnippet, String userQuestion) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json");
@@ -1757,6 +1755,7 @@ public class EncouragementServiceApplication {
 						"- Ignore all unrelated code and blocks; do not describe, summarize, or reference them in any way.\n" +
 						"\n" +
 						"Output format (plain text):\n" +
+						"********** Outer Method: " + outerMethodName +  "**********" +
 						"\"When this condition is met, <business explanation of the effect>\"";
 
 		body.put("prompt", prompt);
