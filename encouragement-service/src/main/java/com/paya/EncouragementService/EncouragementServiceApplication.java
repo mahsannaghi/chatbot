@@ -15,6 +15,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -80,6 +81,8 @@ public class EncouragementServiceApplication {
 	static List<MethodDeclaration> methodsList= new ArrayList<>();
 	static List<HashMap<String, Set<String>>> methodsInnerMethodList= new ArrayList<>();
 	static Map<String, Set<String>> businessBlocksMapTag = new HashMap<>();
+	static Map<String, String> businessBlocksMap;
+	static Map<String, List<Map<String, Object>>> blocksMap;
 	static List<String> methodsNameFromFile= new ArrayList<>();
 	public static void main(String[] args) throws Exception {
 		final Map env = Dotenv.load().entries().stream().collect(Collectors.toMap(DotenvEntry::getKey, DotenvEntry::getValue));
@@ -268,7 +271,7 @@ public class EncouragementServiceApplication {
 //			}, null);
 //		}
 
-//		Map<String, String> blocksMap = extractIfElseLinesMap(methodsList);
+		blocksMap = extractIfElseLinesMap(methodsList);
 //		Map<String, String> businessBlocksMap = new HashMap<>();
 //		Map<String, String> methodFlowChartMap = new HashMap<>();
 //		Map<String, List<Double>> blocksEmbeddings = getBlocksEmbeddings(blocksMap);
@@ -417,7 +420,7 @@ public class EncouragementServiceApplication {
 		if (businessBlocksMapTag.isEmpty())
 			tagIfAndElse();
 //		finalOfAll("if the amount of encouragement be outer of Registrar Power Limits amount what happened in calculator?");
-//		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?");
+//		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?", allClasses);
 		finalOfAll("when the calculator method is called?", allClasses);
 //		finalOfAll("when does changeEncouragementStatus to UNDER_COMMISSION_REVIEW?");
 //		finalOfAll("when does deleteEncouragementReview call?");
@@ -1268,38 +1271,63 @@ public class EncouragementServiceApplication {
 				}
 			}
 
-			List<MethodDeclaration> outerDeclaration = methodsList.stream().filter(methodDeclaration -> outerMethodList.contains(methodDeclaration.getName().toString())).toList();
+
+//			List<MethodDeclaration> outerDeclaration = methodsList.stream().filter(methodDeclaration -> outerMethodList.contains(methodDeclaration.getName().toString())).toList();
+//			String finalInnerMethod = innerMethod;
+//			outerDeclaration.forEach(methodDeclaration -> {
+//				answerFromCodeWithInnerMethod(methodDeclaration.toString(), finalInnerMethod, question);
+//				for (Map.Entry<String, CompilationUnit> entry : allClasses.entrySet()) {
+//					CompilationUnit cu = entry.getValue();
+//					cu.accept(new VoidVisitorAdapter<Void>() {
+//
+//						@Override
+//						public void visit(MethodDeclaration md, Void arg) {
+//							super.visit(md, arg);
+//
+//							md.accept(new VoidVisitorAdapter<Void>() {
+//								@Override
+//								public void visit(MethodCallExpr call, Void arg) {
+//									super.visit(call, arg);
+//									Optional<MethodDeclaration> parentMethod = call.findAncestor(MethodDeclaration.class);
+//									if (call.getNameAsString().equals(methodDeclaration.getNameAsString())) {
+//										String newQuestion = "when the " + methodDeclaration.getNameAsString() + " is called?";
+//										System.out.println("##################################################################################################################################");
+//										System.out.println("this method: " + methodDeclaration.getNameAsString() + "is called in: " + parentMethod.get().getNameAsString());
+//										parentMethod.ifPresent(declaration -> answerFromCodeWithInnerMethod(declaration.toString(), methodDeclaration.getNameAsString(), newQuestion));
+//									}
+//								}
+//							}, null);
+//						}
+//
+//					}, null);
+//				}
+//				System.out.println("##################################################################################################################################");
+//				System.out.println("this is the final entry point in the call chain and it is invoked directly by the frontend (the users action triggers this method)");
+//			});
+
 			String finalInnerMethod = innerMethod;
-			outerDeclaration.forEach(methodDeclaration -> {
-				answerFromCodeWithInnerMethod(methodDeclaration.toString(), finalInnerMethod, question);
-				for (Map.Entry<String, CompilationUnit> entry : allClasses.entrySet()) {
-					CompilationUnit cu = entry.getValue();
-					cu.accept(new VoidVisitorAdapter<Void>() {
-
-						@Override
-						public void visit(MethodDeclaration md, Void arg) {
-							super.visit(md, arg);
-
-							md.accept(new VoidVisitorAdapter<Void>() {
-								@Override
-								public void visit(MethodCallExpr call, Void arg) {
-									super.visit(call, arg);
-									Optional<MethodDeclaration> parentMethod = call.findAncestor(MethodDeclaration.class);
-									if (call.getNameAsString().equals(methodDeclaration.getNameAsString())) {
-										String newQuestion = "when the " + methodDeclaration.getNameAsString() + " is called?";
-										System.out.println("##################################################################################################################################");
-										System.out.println("this method: " + methodDeclaration.getNameAsString() + "is called in: " + parentMethod.get().getNameAsString());
-										parentMethod.ifPresent(declaration -> answerFromCodeWithInnerMethod(declaration.toString(), methodDeclaration.getNameAsString(), newQuestion));
-									}
-								}
-							}, null);
-						}
-
-					}, null);
-				}
-				System.out.println("##################################################################################################################################");
-				System.out.println("this is the final entry point in the call chain and it is invoked directly by the frontend (the users action triggers this method)");
+//			List<List<Map<String, Object>>> lists = blocksMap.values().stream().toList();
+			List<Map<String, Object>> mapList = blocksMap.values().stream().toList().get(0).stream().toList();
+			blocksMap.forEach((s, maps) -> {
+				maps.forEach(stringObjectMap -> {
+					if (stringObjectMap.values().toString().contains(finalInnerMethod)) {
+						answerFromCodeWithBlockAndInnerMethod(s, finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString());
+					}
+				});
 			});
+//			lists.forEach(maps -> {
+//				maps.stream().filter(stringObjectMap -> stringObjectMap.entrySet().stream().toList().get(1).getValue().toString().contains(finalInnerMethod))
+//						.forEach(stringObjectMap ->
+//								answerFromCodeWithBlockAndInnerMethod(blocksMap.keySet().toString(), finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString()));
+//			});
+			mapList.stream().filter(stringObjectMap -> stringObjectMap.entrySet().stream().toList().get(1).getValue().toString().contains(finalInnerMethod))
+					.forEach(stringObjectMap ->
+							answerFromCodeWithBlockAndInnerMethod(blocksMap.keySet().toString(), finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString()));
+//			blocksMap.entrySet().stream().filter(stringStringEntry -> stringStringEntry.getValue().contains(finalInnerMethod)).forEach(stringStringEntry -> {
+//				String key = stringStringEntry.getKey();
+//				String[] split = key.split("/");
+//				answerFromCodeWithBlockAndInnerMethod(split[0], finalInnerMethod, split[1], stringStringEntry.getValue().toString());
+//			});
 		}
 	}
 
@@ -1415,7 +1443,7 @@ public class EncouragementServiceApplication {
 	private static void tagIfAndElse() throws IOException {
 		String json = Files.readString(Path.of("F:/Projects/encouragement-develop/encouragement-service/blockMapWithTotalCodeWithNegativeElse.json"));
 		ObjectMapper mapper = new ObjectMapper();
-		Map<String, String> businessBlocksMap = mapper.readValue(json, Map.class);
+		businessBlocksMap= mapper.readValue(json, Map.class);
 		String getterRegex = "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\.get([A-Z][a-zA-Z0-9_]*)\\s*\\(";
 		Pattern pattern = Pattern.compile(getterRegex);
 		businessBlocksMap.entrySet().forEach(s -> {
@@ -1730,6 +1758,71 @@ public class EncouragementServiceApplication {
 						"\n" +
 						"Output format (plain text):\n" +
 						"\"When this condition is met, <business explanation of the effect>\"";
+
+		body.put("prompt", prompt);
+		body.put("stream", false);
+		String url = "http://localhost:11434/api/generate";
+		HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+		int i = 1;
+		String explanation = null;
+		while (i <= 1) {
+			ResponseEntity<HumanResourceRelatedManagerDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, HumanResourceRelatedManagerDTO.class);
+			if (response.getStatusCode().equals(HttpStatus.OK)) {
+				explanation = Objects.requireNonNull(response.getBody()).getResponse();
+
+			}
+			System.out.println("----------------------------------------------------------------------------------------");
+			System.out.println(explanation);
+			i++;
+		}
+
+		return explanation;
+	}
+
+	private static String answerFromCodeWithBlockAndInnerMethod(String outerMethodName, String innerMethodName, String controllingCondition, String innerCall) {
+   		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		Map<String, Object> body = new HashMap<>();
+		body.put("model", "llama3");
+
+		String prompt =
+				"You are an expert Java business logic analyzer.\n" +
+						"\n" +
+						"You are given:\n" +
+						"- The name of an outer method (outerMethodName)\n" +
+						"- The name of an inner method that is called inside it (innerMethodName)\n" +
+						"- The controlling condition for this call (controllingCondition)\n" +
+						"- The exact inner method invocation code (innerCall)\n" +
+						"- Optional business definitions for variables (variableDefinitions)\n" +
+						"\n" +
+						"Your job:\n" +
+						"Explain **how and under what condition** the inner method is called inside the outer method.\n" +
+						"\n" +
+						"Rules:\n" +
+						"1. Describe the condition exactly as written in Java (ConditionCode).\n" +
+						"2. For the 'Condition' field: BREAK controllingCondition into its individual logical sub-conditions.\n" +
+						"   - Output them as a numbered list (1., 2., 3., ...).\n" +
+						"   - Each item MUST use the exact Java text of the sub-condition.\n" +
+						"   - Do NOT paraphrase, summarize, or modify the condition text.\n" +
+						"3. Provide a business interpretation using variableDefinitions (Description).\n" +
+						"4. Show the exact method call (Call).\n" +
+						"5. If the inner method is called unconditionally, say so.\n" +
+						"\n" +
+						"Output Format:\n" +
+						"********** Outer Method: " + outerMethodName + " **********\n" +
+						"{\n" +
+						"  \"" + innerMethodName + "\": [\n" +
+						"    {\n" +
+						"      \"ConditionCode\": \"" + controllingCondition + "\",\n" +
+						"      \"Condition\": \"Numbered list of extracted sub-conditions.\",\n" +
+						"      \"Description\": \"Business explanation of why this condition exists\",\n" +
+						"      \"Call\": \"" + innerCall + "\"\n" +
+						"    }\n" +
+						"  ]\n" +
+						"}\n";
+
+
 
 		body.put("prompt", prompt);
 		body.put("stream", false);
@@ -2688,89 +2781,129 @@ public class EncouragementServiceApplication {
 	}
 
 
-	public static Map<String, String> extractIfElseLinesMap(List<MethodDeclaration> methods) {
-		Map<String, String> linesMap = new LinkedHashMap<>();
+	public static Map<String, List<Map<String, Object>>> extractIfElseLinesMap(List<MethodDeclaration> methods) {
+		Map<String, List<Map<String, Object>>> linesMap = new LinkedHashMap<>();
 
 		for (MethodDeclaration method : methods) {
-
-			method.accept(new VoidVisitorAdapter<Void>() {
+			method.accept(new VoidVisitorAdapter<Deque<Expression>>() {
+				Deque<Expression> currentStack;
 
 				@Override
-				public void visit(IfStmt ifStmt, Void arg) {
-					super.visit(ifStmt, arg);
+				public void visit(IfStmt ifStmt, Deque<Expression> parentConditions) {
 
-					// لیست نام متدهای موردنظر
-					List<String> targetMethods = Arrays.asList(
-							"updateEachEncouragementReviewThatNeeded",
-							"updateEncouragementReview",
-							"forwardNextManager",
-							"sentForRegistrar",
-							"deleteRegistrarReviewIfExist",
-							"forwardPreviousManager",
-							"commissionInput",
-							"afterCheckingRegistrarPowerLimit",
-							"forwardEncouragementForNextStep",
-							"calculator",
-							"addOrUpdateEncouragement"
-					);
+//					List<String> targetMethods = Arrays.asList(
+//							"updateEachEncouragementReviewThatNeeded",
+//							"updateEncouragementReview",
+//							"forwardNextManager",
+//							"sentForRegistrar",
+//							"deleteRegistrarReviewIfExist",
+//							"forwardPreviousManager",
+//							"commissionInput",
+//							"afterCheckingRegistrarPowerLimit",
+//							"forwardEncouragementForNextStep",
+//							"calculator",
+//							"addOrUpdateEncouragement"
+//					);
 
 					String currentMethodName = method.getNameAsString();
 
-					// فقط اگر متد فعلی جزو این لیست بود
-					if (targetMethods.contains(currentMethodName)) {
+//					if (targetMethods.contains(currentMethodName)) {
 
-						// BASE KEY برای IF
-						String baseKey =
-								currentMethodName + " / if (" + ifStmt.getCondition().toString() + ")";
+						// کپی استک والد برای این شاخه
+						currentStack = new ArrayDeque<>(parentConditions);
 
-						int lineCounter = 1;
+						// شرط این IF را به استک اضافه کن
+						currentStack.push(ifStmt.getCondition());
 
 						// THEN block
 						if (ifStmt.getThenStmt().isBlockStmt()) {
 							for (Statement stmt : ifStmt.getThenStmt().asBlockStmt().getStatements()) {
-								String key = baseKey + " / line" + lineCounter++;
-								linesMap.put(key, stmt.toString().trim());
+								visitStatement(stmt, currentStack, method.getNameAsString());
 							}
 						} else {
-							linesMap.put(baseKey + " / line1",
-									ifStmt.getThenStmt().toString().trim());
+							visitStatement(ifStmt.getThenStmt(), currentStack, method.getNameAsString());
 						}
 
 						// ELSE block
 						ifStmt.getElseStmt().ifPresent(elseStmt -> {
-
-							String negated =
-									new UnaryExpr(ifStmt.getCondition(), UnaryExpr.Operator.LOGICAL_COMPLEMENT)
-											.toString();
-							negated = simplify(negated);
-
-							String elseBaseKey =
-									currentMethodName + " / else (NEGATED: " + negated + ")";
-
-							int elseCounter = 1;
+							// شرط منفی ELSE
+							Expression negated = new UnaryExpr(ifStmt.getCondition(), UnaryExpr.Operator.LOGICAL_COMPLEMENT);
+							Deque<Expression> elseStack = new ArrayDeque<>(parentConditions);
+							elseStack.push(negated);
 
 							if (elseStmt.isBlockStmt()) {
 								for (Statement stmt : elseStmt.asBlockStmt().getStatements()) {
-									String key = elseBaseKey + " / line" + elseCounter++;
-									linesMap.put(key, stmt.toString().trim());
+									visitStatement(stmt, elseStack, method.getNameAsString());
 								}
 							} else {
-								linesMap.put(elseBaseKey + " / line1",
-										elseStmt.toString().trim());
+								visitStatement(elseStmt, elseStack, method.getNameAsString());
 							}
-
 						});
 
+						super.visit(ifStmt, parentConditions);
+//					}
+				}
+
+				private void visitStatement(Statement stmt, Deque<Expression> conditionStack, String currentMethodName) {
+
+					if (stmt.isExpressionStmt() && stmt.asExpressionStmt().getExpression().isMethodCallExpr()) {
+
+						MethodCallExpr call = stmt.asExpressionStmt().getExpression().asMethodCallExpr();
+
+						// یک ID یکتا برای این کال (برای تشخیص اینکه همان کال است)
+						String callId = call.getBegin()
+								.map(p -> p.line + ":" + p.column)
+								.orElse(call.toString());
+
+						// شروط جدید
+						List<String> newConditions = conditionStack.stream()
+								.map(Expression::toString)
+								.toList();
+
+						// گرفتن لیست رکوردهای این متد
+						List<Map<String, Object>> methodRecords =
+								linesMap.computeIfAbsent(currentMethodName, k -> new ArrayList<>());
+
+						// پیدا کردن این کال (اگر قبلا ثبت شده)
+						Optional<Map<String, Object>> existingOpt = methodRecords.stream()
+								.filter(r -> r.get("callId").equals(callId))
+								.findFirst();
+
+						if (existingOpt.isPresent()) {
+							Map<String, Object> existing = existingOpt.get();
+							List<String> oldConditions = (List<String>) existing.get("conditions");
+
+							// اگر قبلی کامل تر است → جدید را ذخیره نکن
+							if (oldConditions.containsAll(newConditions)) {
+								return;
+							}
+
+							// اگر جدید کامل تر است → جایگزین کن
+							if (newConditions.containsAll(oldConditions)) {
+								existing.put("conditions", new ArrayList<>(newConditions));
+								return;
+							}
+
+							// مسیرها متفاوت هستند → باید رکورد جدید ایجاد شود
+						}
+
+						// رکورد جدید
+						Map<String, Object> record = new LinkedHashMap<>();
+						record.put("callId", callId); // برای جلوگیری از تکرار اشتباهی
+						record.put("calledMethod", call.toString());
+						record.put("conditions", new ArrayList<>(newConditions));
+
+						methodRecords.add(record);
 					}
 
+					stmt.accept(this, conditionStack);
 				}
-			}, null);
-		}
 
+			}, new ArrayDeque<>());
+		}
 		return linesMap;
 
 	}
-
 	static String simplify(String expr) {
 		while (expr.contains("!!")) {
 			expr = expr.replace("!!", "");
