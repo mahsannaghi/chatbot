@@ -419,10 +419,11 @@ public class EncouragementServiceApplication {
 		if (businessBlocksMapTag.isEmpty())
 			tagIfAndElse();
 //		finalOfAll("if the amount of encouragement be outer of Registrar Power Limits amount what happened in calculator?", allClasses);
-		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?", allClasses);
+//		finalOfAll("if the encouragementReviewResult be SENT_FOR_RECENT_MANAGER_CORRECTION what happened?", allClasses);
 //		finalOfAll("when the calculator method is called?", allClasses);
 //		finalOfAll("when does changeEncouragementStatus to UNDER_COMMISSION_REVIEW?", allClasses);
 //		finalOfAll("when does deleteEncouragementReview call?", allClasses);
+		finalOfAll("when does getAllCommissionReviewsForThisEncouragement call?", allClasses);
 		String json1 = Files.readString(Path.of("F:/Projects/encouragement-develop/encouragement-service/updatedEmbeddingsqQ.json"));
 		ObjectMapper mapper = new ObjectMapper();
 		// تبدیل JSON به Map
@@ -1309,7 +1310,20 @@ public class EncouragementServiceApplication {
 			blocksMap.forEach((s, maps) -> {
 				maps.forEach(stringObjectMap -> {
 					if (stringObjectMap.values().toString().contains(finalInnerMethod)) {
-						answerFromCodeWithBlockAndInnerMethod(s, finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString());
+						if (!stringObjectMap.get("conditions").toString().equals("[]"))
+							answerFromCodeWithBlockAndInnerMethod(s, finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString());
+						else {
+							String output="" +
+									"********** Outer Method:" +  s + " ********** " + "\n" +
+									"{\n" +
+									"  \"" + finalInnerMethod + "\": [\n" +
+									"    {\n" +
+									"      \"Call\": \"" + stringObjectMap.get("calledMethod").toString() + "\"\n" +
+									"    }\n"  +
+									"  ]\n" +
+									"}\n";
+							System.out.println(output);
+						}
 					}
 				});
 			});
@@ -1318,9 +1332,9 @@ public class EncouragementServiceApplication {
 //						.forEach(stringObjectMap ->
 //								answerFromCodeWithBlockAndInnerMethod(blocksMap.keySet().toString(), finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString()));
 //			});
-			mapList.stream().filter(stringObjectMap -> stringObjectMap.entrySet().stream().toList().get(1).getValue().toString().contains(finalInnerMethod))
-					.forEach(stringObjectMap ->
-							answerFromCodeWithBlockAndInnerMethod(blocksMap.keySet().toString(), finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString()));
+//			mapList.stream().filter(stringObjectMap -> stringObjectMap.entrySet().stream().toList().get(1).getValue().toString().contains(finalInnerMethod))
+//					.forEach(stringObjectMap ->
+//							answerFromCodeWithBlockAndInnerMethod(blocksMap.keySet().toString(), finalInnerMethod, stringObjectMap.get("conditions").toString(), stringObjectMap.get("calledMethod").toString()));
 //			blocksMap.entrySet().stream().filter(stringStringEntry -> stringStringEntry.getValue().contains(finalInnerMethod)).forEach(stringStringEntry -> {
 //				String key = stringStringEntry.getKey();
 //				String[] split = key.split("/");
@@ -1747,16 +1761,21 @@ public class EncouragementServiceApplication {
 						"2. A user question in natural language: `" + userQuestion + "`.\n" +
 						"\n" +
 						"Task:\n" +
-						"- Locate the specific block of code (if/else/else if) that is most relevant to the user question.\n" +
-						"- ONLY analyze this single relevant block. Do NOT analyze any other code in the method.\n" +
-						"- Determine what happens when the condition of that block is true.\n" +
-						"- Provide a clear, business-oriented explanation in simple terms.\n" +
-						"- If the question relates to an else block, consider the negation of the if condition as part of the logic.\n" +
-						"- Ignore all unrelated code and blocks; do not describe, summarize, or reference them in any way.\n" +
+						"- Identify the single most relevant if/else/else-if block related to the user's question.\n" +
+						"- ONLY analyze that one block. Do NOT analyze or reference any other part of the method.\n" +
+						"- Extract and display the exact Java code inside that block where the inner method is called.\n" +
+						"- After showing the code, provide a clear business-oriented explanation of what happens when the condition is met.\n" +
+						"- If the relevant block is an else block, interpret and explain it based on the negation of the previous condition.\n" +
+						"- Ignore all unrelated blocks entirely.\n" +
 						"\n" +
-						"Output format (plain text):\n" +
-						"********** Outer Method: " + outerMethodName +  "**********" +
-						"\"When this condition is met, <business explanation of the effect>\"";
+						"Output format:\n" +
+						"********** Outer Method: " + outerMethodName + " **********\n" +
+						"[1] Relevant Code Block:\n" +
+						"<paste the exact Java code snippet where the inner method is called>\n" +
+						"\n" +
+						"[2] Business Explanation:\n" +
+						"\"When this condition is met, <business explanation>\"";
+
 
 		body.put("prompt", prompt);
 		body.put("stream", false);
@@ -2787,122 +2806,122 @@ public class EncouragementServiceApplication {
 			method.accept(new VoidVisitorAdapter<Deque<Expression>>() {
 				Deque<Expression> currentStack;
 
+				// NEW: when entering a method, process top-level statements with an empty condition stack
 				@Override
-				public void visit(IfStmt ifStmt, Deque<Expression> parentConditions) {
-
-//					List<String> targetMethods = Arrays.asList(
-//							"updateEachEncouragementReviewThatNeeded",
-//							"updateEncouragementReview",
-//							"forwardNextManager",
-//							"sentForRegistrar",
-//							"deleteRegistrarReviewIfExist",
-//							"forwardPreviousManager",
-//							"commissionInput",
-//							"afterCheckingRegistrarPowerLimit",
-//							"forwardEncouragementForNextStep",
-//							"calculator",
-//							"addOrUpdateEncouragement"
-//					);
-
-					String currentMethodName = method.getNameAsString();
-
-//					if (targetMethods.contains(currentMethodName)) {
-
-						// کپی استک والد برای این شاخه
-						currentStack = new ArrayDeque<>(parentConditions);
-
-						// شرط این IF را به استک اضافه کن
-						currentStack.push(ifStmt.getCondition());
-
-						// THEN block
-						if (ifStmt.getThenStmt().isBlockStmt()) {
-							for (Statement stmt : ifStmt.getThenStmt().asBlockStmt().getStatements()) {
-								visitStatement(stmt, currentStack, method.getNameAsString());
-							}
-						} else {
-							visitStatement(ifStmt.getThenStmt(), currentStack, method.getNameAsString());
+				public void visit(MethodDeclaration md, Deque<Expression> parentConditions) {
+					// Start with an empty stack for top-level (no surrounding IFs)
+					Deque<Expression> empty = new ArrayDeque<>();
+					md.getBody().ifPresent(body -> {
+						for (Statement stmt : body.getStatements()) {
+							// use same visitStatement routine so logic is unified
+							visitStatement(stmt, empty, md.getNameAsString());
 						}
-
-						// ELSE block
-						ifStmt.getElseStmt().ifPresent(elseStmt -> {
-							// شرط منفی ELSE
-							Expression negated = new UnaryExpr(ifStmt.getCondition(), UnaryExpr.Operator.LOGICAL_COMPLEMENT);
-							Deque<Expression> elseStack = new ArrayDeque<>(parentConditions);
-							elseStack.push(negated);
-
-							if (elseStmt.isBlockStmt()) {
-								for (Statement stmt : elseStmt.asBlockStmt().getStatements()) {
-									visitStatement(stmt, elseStack, method.getNameAsString());
-								}
-							} else {
-								visitStatement(elseStmt, elseStack, method.getNameAsString());
-							}
-						});
-
-						super.visit(ifStmt, parentConditions);
-//					}
+					});
+					// Continue normal visiting (this will visit nested ifs etc.)
+					super.visit(md, empty);
 				}
 
-				private void visitStatement(Statement stmt, Deque<Expression> conditionStack, String currentMethodName) {
+				@Override
+				public void visit(IfStmt ifStmt, Deque<Expression> parentConditions) {
+					// copy parent stack
+					currentStack = new ArrayDeque<>(parentConditions);
 
-					if (stmt.isExpressionStmt() && stmt.asExpressionStmt().getExpression().isMethodCallExpr()) {
+					// push this if condition (parent conditions + this)
+					currentStack.push(ifStmt.getCondition());
 
-						MethodCallExpr call = stmt.asExpressionStmt().getExpression().asMethodCallExpr();
-
-						// یک ID یکتا برای این کال (برای تشخیص اینکه همان کال است)
-						String callId = call.getBegin()
-								.map(p -> p.line + ":" + p.column)
-								.orElse(call.toString());
-
-						// شروط جدید
-						List<String> newConditions = conditionStack.stream()
-								.map(Expression::toString)
-								.toList();
-
-						// گرفتن لیست رکوردهای این متد
-						List<Map<String, Object>> methodRecords =
-								linesMap.computeIfAbsent(currentMethodName, k -> new ArrayList<>());
-
-						// پیدا کردن این کال (اگر قبلا ثبت شده)
-						Optional<Map<String, Object>> existingOpt = methodRecords.stream()
-								.filter(r -> r.get("callId").equals(callId))
-								.findFirst();
-
-						if (existingOpt.isPresent()) {
-							Map<String, Object> existing = existingOpt.get();
-							List<String> oldConditions = (List<String>) existing.get("conditions");
-
-							// اگر قبلی کامل تر است → جدید را ذخیره نکن
-							if (oldConditions.containsAll(newConditions)) {
-								return;
-							}
-
-							// اگر جدید کامل تر است → جایگزین کن
-							if (newConditions.containsAll(oldConditions)) {
-								existing.put("conditions", new ArrayList<>(newConditions));
-								return;
-							}
-
-							// مسیرها متفاوت هستند → باید رکورد جدید ایجاد شود
+					// THEN block
+					if (ifStmt.getThenStmt().isBlockStmt()) {
+						for (Statement stmt : ifStmt.getThenStmt().asBlockStmt().getStatements()) {
+							visitStatement(stmt, currentStack, method.getNameAsString());
 						}
-
-						// رکورد جدید
-						Map<String, Object> record = new LinkedHashMap<>();
-						record.put("callId", callId); // برای جلوگیری از تکرار اشتباهی
-						record.put("calledMethod", call.toString());
-						record.put("conditions", new ArrayList<>(newConditions));
-
-						methodRecords.add(record);
+					} else {
+						visitStatement(ifStmt.getThenStmt(), currentStack, method.getNameAsString());
 					}
 
+					// ELSE block -> use negated condition as requested
+					ifStmt.getElseStmt().ifPresent(elseStmt -> {
+						Expression negated = new UnaryExpr(ifStmt.getCondition(), UnaryExpr.Operator.LOGICAL_COMPLEMENT);
+						Deque<Expression> elseStack = new ArrayDeque<>(parentConditions);
+						elseStack.push(negated);
+
+						if (elseStmt.isBlockStmt()) {
+							for (Statement stmt : elseStmt.asBlockStmt().getStatements()) {
+								visitStatement(stmt, elseStack, method.getNameAsString());
+							}
+						} else {
+							visitStatement(elseStmt, elseStack, method.getNameAsString());
+						}
+					});
+
+					// still call super to traverse other nested nodes if any
+					super.visit(ifStmt, parentConditions);
+				}
+
+				// CENTRALIZED: record ANY method call expression we encounter,
+				// using the current conditionStack passed by the visitor.
+				@Override
+				public void visit(MethodCallExpr call, Deque<Expression> conditionStack) {
+					super.visit(call, conditionStack);
+
+					// build a callId (line:col) if available, otherwise the call text
+					String callId = call.getBegin()
+							.map(p -> p.line + ":" + p.column)
+							.orElse(call.toString());
+
+					// conditions: if stack is null or empty -> produce empty list
+					List<String> newConditions = conditionStack == null
+							? Collections.emptyList()
+							: conditionStack.stream().map(Expression::toString).toList();
+
+					String currentMethodName = method.getNameAsString();
+					List<Map<String, Object>> methodRecords =
+							linesMap.computeIfAbsent(currentMethodName, k -> new ArrayList<>());
+
+					// try to find existing record for same callId
+					Optional<Map<String, Object>> existingOpt = methodRecords.stream()
+							.filter(r -> r.get("callId").equals(callId))
+							.findFirst();
+
+					if (existingOpt.isPresent()) {
+						Map<String, Object> existing = existingOpt.get();
+						List<String> oldConditions = (List<String>) existing.get("conditions");
+
+						// if old contains all new -> keep old (it's more general/complete)
+						if (oldConditions.containsAll(newConditions)) {
+							return;
+						}
+
+						// if new contains all old -> replace with new (new is more specific)
+						if (newConditions.containsAll(oldConditions)) {
+							existing.put("conditions", new ArrayList<>(newConditions));
+							return;
+						}
+
+						// otherwise different path — create additional record below
+					}
+
+					// create new record
+					Map<String, Object> record = new LinkedHashMap<>();
+					record.put("callId", callId);
+					record.put("calledMethod", call.toString());
+					record.put("conditions", new ArrayList<>(newConditions));
+
+					methodRecords.add(record);
+				}
+
+				// visitStatement now delegates to AST visiting to find inner MethodCallExpr etc.
+				private void visitStatement(Statement stmt, Deque<Expression> conditionStack, String currentMethodName) {
+					// Just traverse the statement with the given conditionStack so MethodCallExpr visitor sees it
 					stmt.accept(this, conditionStack);
 				}
 
 			}, new ArrayDeque<>());
 		}
 		return linesMap;
-
 	}
+
+
+
 	static String simplify(String expr) {
 		while (expr.contains("!!")) {
 			expr = expr.replace("!!", "");
